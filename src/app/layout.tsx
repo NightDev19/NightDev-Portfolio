@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
+import { SplashScreen } from '@/components/ui/loader'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -93,7 +94,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <SplashScreen>
+            {children}
+          </SplashScreen>
           <Toaster />
         </ThemeProvider>
       </body>
