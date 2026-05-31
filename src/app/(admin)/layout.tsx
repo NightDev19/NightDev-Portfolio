@@ -1,6 +1,6 @@
 import { getCurrentUser } from '@/features/auth/queries'
 import { AdminSidebar } from './admin-sidebar'
-import { AdminLoginPage } from './login-page'
+import { AdminLoginPage } from './admin/login-page'
 
 export default async function AdminLayout({
   children,
