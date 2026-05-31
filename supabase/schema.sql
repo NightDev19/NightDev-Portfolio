@@ -1,14 +1,32 @@
 -- ============================================
 -- Sherwin Jefferson Tajan Portfolio - Supabase Schema
+-- Drop existing tables and recreate fresh
 -- ============================================
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ============================================
+-- Drop existing tables (order matters due to foreign keys)
+-- ============================================
+DROP TABLE IF EXISTS public.contact_messages CASCADE;
+DROP TABLE IF EXISTS public.experiences CASCADE;
+DROP TABLE IF EXISTS public.skills CASCADE;
+DROP TABLE IF EXISTS public.blog_posts CASCADE;
+DROP TABLE IF EXISTS public.projects CASCADE;
+DROP TABLE IF EXISTS public.profiles CASCADE;
+
+-- Drop existing triggers
+DROP TRIGGER IF EXISTS update_projects_updated_at ON public.projects;
+DROP TRIGGER IF EXISTS update_blog_posts_updated_at ON public.blog_posts;
+
+-- Drop existing function
+DROP FUNCTION IF EXISTS public.update_updated_at_column() CASCADE;
+
+-- ============================================
 -- Profiles Table
 -- ============================================
-CREATE TABLE IF NOT EXISTS public.profiles (
+CREATE TABLE public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name TEXT,
   role TEXT,
@@ -19,7 +37,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 -- ============================================
 -- Projects Table
 -- ============================================
-CREATE TABLE IF NOT EXISTS public.projects (
+CREATE TABLE public.projects (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
@@ -37,7 +55,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
 -- ============================================
 -- Blog Posts Table
 -- ============================================
-CREATE TABLE IF NOT EXISTS public.blog_posts (
+CREATE TABLE public.blog_posts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
@@ -52,7 +70,7 @@ CREATE TABLE IF NOT EXISTS public.blog_posts (
 -- ============================================
 -- Skills Table
 -- ============================================
-CREATE TABLE IF NOT EXISTS public.skills (
+CREATE TABLE public.skills (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   category TEXT NOT NULL,
@@ -65,7 +83,7 @@ CREATE TABLE IF NOT EXISTS public.skills (
 -- ============================================
 -- Experiences Table
 -- ============================================
-CREATE TABLE IF NOT EXISTS public.experiences (
+CREATE TABLE public.experiences (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
   organization TEXT,
@@ -81,7 +99,7 @@ CREATE TABLE IF NOT EXISTS public.experiences (
 -- ============================================
 -- Contact Messages Table
 -- ============================================
-CREATE TABLE IF NOT EXISTS public.contact_messages (
+CREATE TABLE public.contact_messages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   email TEXT NOT NULL,
