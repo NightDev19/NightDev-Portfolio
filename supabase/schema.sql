@@ -184,7 +184,8 @@ INSERT INTO public.skills (name, category, level, order_index) VALUES
   ('TypeScript', 'Frontend', 'Intermediate', 4),
   ('JavaScript', 'Frontend', 'Intermediate', 5),
   ('Tailwind CSS', 'Frontend', 'Intermediate', 6),
-  ('Responsive UI', 'Frontend', 'Intermediate', 7),
+  ('shadcn/ui', 'Frontend', 'Intermediate', 7),
+  ('Responsive UI', 'Frontend', 'Intermediate', 8),
   ('UI/UX Improvement', 'Frontend', 'Intermediate', 8),
   ('Python', 'Backend', 'Intermediate', 9),
   ('FastAPI', 'Backend', 'Intermediate', 10),
@@ -195,7 +196,8 @@ INSERT INTO public.skills (name, category, level, order_index) VALUES
   ('.NET 8', 'Backend', 'Intermediate', 15),
   ('ASP.NET Core', 'Backend', 'Beginner', 16),
   ('Avalonia UI', 'Desktop Development', 'Intermediate', 17),
-  ('MVVM', 'Desktop Development', 'Intermediate', 18),
+  ('.NET MAUI', 'Desktop Development', 'Intermediate', 18),
+  ('MVVM', 'Desktop Development', 'Intermediate', 19),
   ('CommunityToolkit.Mvvm', 'Desktop Development', 'Intermediate', 19),
   ('SQLite', 'Desktop Development', 'Intermediate', 20),
   ('Entity Framework Core', 'Desktop Development', 'Intermediate', 21),
@@ -244,41 +246,27 @@ INSERT INTO public.projects (title, slug, description, tech_stack, github_url, f
 -- ============================================
 -- Seed Data: Experiences
 -- ============================================
-INSERT INTO public.experiences (title, organization, description, tech_stack, start_date, current, order_index) VALUES
+INSERT INTO public.experiences (title, organization, description, tech_stack, start_date, end_date, current, order_index) VALUES
   (
-    'Project Chameleon - Desktop Application Developer',
-    'Personal Project',
-    'Built a full-featured desktop application using Avalonia UI and .NET 8. Implemented login page with authentication, RBAC sidebar permissions, dashboard with interactive cards, device information pages, sensor monitoring, profile management, notifications system, and activity logging. Used SQLite with Entity Framework Core for data persistence and applied MVVM architecture with CommunityToolkit.Mvvm.',
-    ARRAY['Avalonia UI', '.NET 8', 'C#', 'SQLite', 'EF Core', 'MVVM'],
-    '2024-06-01', true, 1
+    'Mid Software Engineer',
+    'Code Fusion IT Solutions',
+    'Maintained and enhanced a University Library Information Management System (LIMS) using React.js, Python, and PostgreSQL, improving system reliability and usability for students and faculty. Developed cross-platform desktop applications for IoT projects using .NET MAUI and Avalonia, enabling real-time device monitoring and data visualization. Designed and integrated RESTful APIs to support seamless communication between frontend applications, backend services, and connected devices. Collaborated with cross-functional teams to develop, optimize, and troubleshoot full-stack features, improving application performance and maintainability.',
+    ARRAY['React.js', 'Python', 'PostgreSQL', '.NET MAUI', 'Avalonia', 'RESTful APIs', 'Docker'],
+    '2025-07-01', '2026-05-01', false, 1
   ),
   (
-    'Docker Compose Learning - DevOps',
-    'Self-Directed Learning',
-    'Designed and implemented a full-stack Docker environment with multiple containers including frontend, FastAPI backend, and MongoDB. Configured Docker Compose for service orchestration, managed environment variables, controlled startup order, implemented container networking, and used volumes for persistent data storage.',
-    ARRAY['Docker', 'Docker Compose', 'FastAPI', 'MongoDB'],
-    '2024-03-01', false, 2
+    'Junior Software Engineer',
+    'Innocore Systems Solutions',
+    'Maintained and enhanced a school monitoring system using Next.js, Tailwind CSS, Supabase, Framer Motion, and shadcn/ui, supporting attendance tracking, grade management, RFID security, and reporting features. Developed and maintained the company website, implementing responsive and user-friendly interfaces to improve user experience and accessibility. Collaborated with backend developers to integrate APIs, implement new features, and resolve technical issues across the application stack. Optimized frontend components and application workflows, improving performance, maintainability, and overall user experience.',
+    ARRAY['Next.js', 'Tailwind CSS', 'Supabase', 'Framer Motion', 'shadcn/ui', 'RESTful APIs'],
+    '2025-05-01', '2025-10-01', false, 2
   ),
   (
-    'OAuth Authentication - Backend Development',
-    'Self-Directed Learning',
-    'Experimented with authentication strategies using Node.js and Express with Appwrite as the auth provider. Implemented Google OAuth and GitHub OAuth login flows, understanding token management and session handling.',
-    ARRAY['Node.js', 'Express', 'Appwrite', 'OAuth'],
-    '2024-01-01', false, 3
-  ),
-  (
-    'UI/UX Improvements & Responsive Design',
-    'Personal Projects',
-    'Focused on improving user interfaces across personal projects. Applied responsive design principles, fixed layout issues, improved accessibility, and enhanced overall user experience in desktop and web applications.',
-    ARRAY['Tailwind CSS', 'Avalonia UI', 'Responsive Design', 'UI/UX'],
-    '2024-01-01', true, 4
-  ),
-  (
-    'Backend Authentication & RBAC Implementation',
-    'Personal Projects',
-    'Implemented authentication systems and role-based access control for desktop applications. Designed permission structures, created user roles, and built secure access management systems.',
-    ARRAY['C#', '.NET 8', 'RBAC', 'Authentication', 'EF Core'],
-    '2024-04-01', true, 5
+    'Secondary Teacher',
+    'Tanauan City Academy',
+    'Delivered Senior High School Computer Programming I–IV courses, covering Python programming, web development, SQL databases, and computer hardware fundamentals. Developed instructional materials and practical programming exercises to strengthen students'' technical and problem-solving skills. Provided technical support to faculty members by troubleshooting network connectivity, software installations, and classroom technology issues. Guided students in hands-on projects involving programming, database management, and web application development.',
+    ARRAY['Python', 'Web Development', 'SQL', 'Computer Hardware', 'Teaching'],
+    '2025-05-01', '2025-10-01', false, 3
   );
 
 -- ============================================

@@ -1,6 +1,6 @@
-import { redirect } from 'next/navigation'
 import { getCurrentUser } from '@/features/auth/queries'
 import { AdminSidebar } from './admin-sidebar'
+import { AdminLoginPage } from './login-page'
 
 export default async function AdminLayout({
   children,
@@ -9,8 +9,9 @@ export default async function AdminLayout({
 }) {
   const user = await getCurrentUser()
 
+  // If not logged in, show the login page instead of the admin layout
   if (!user) {
-    redirect('/admin')
+    return <AdminLoginPage />
   }
 
   return (
