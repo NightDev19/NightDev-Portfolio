@@ -287,3 +287,51 @@ INSERT INTO public.blog_posts (title, slug, excerpt, content, tags, published) V
     '# Understanding RBAC in Desktop Applications\n\nRole-Based Access Control restricts system access based on user roles. In desktop applications, RBAC manages what features different users can access.\n\n## Why RBAC Matters\n\nWithout RBAC, every user has the same access level, which is both a security risk and a usability problem.\n\n## Implementation in .NET 8\n\n1. Define roles and permissions\n2. Map permissions to roles\n3. Bind UI visibility to permissions\n4. Enforce permissions on the backend',
     ARRAY['RBAC', '.NET 8', 'Avalonia UI', 'Authentication'], true
   );
+
+-- ============================================
+-- Admin User: Create admin account
+-- ============================================
+-- IMPORTANT: Change the email and password below before running!
+-- The password below uses Supabase's crypt() function with bcrypt.
+-- Default: admin@sherwintajan.dev / Admin@123456
+-- ============================================
+
+-- First, delete any existing admin user with this email (to allow re-running)
+DELETE FROM auth.users WHERE email = 'admin@sherwintajan.dev';
+
+-- Create the admin user in auth.users
+INSERT INTO auth.users (
+  instance_id,
+  id,
+  aud,
+  role,
+  email,
+  encrypted_password,
+  email_confirmed_at,
+  created_at,
+  updated_at,
+  confirmation_token,
+  email_change,
+  email_change_token_new,
+  recovery_token
+) VALUES (
+  '00000000-0000-0000-0000-000000000000',
+  gen_random_uuid(),
+  'authenticated',
+  'authenticated',
+  'admin@sherwintajan.dev',
+  crypt('Admin@123456', gen_salt('bf')),
+  NOW(),
+  NOW(),
+  NOW(),
+  '',
+  '',
+  '',
+  ''
+);
+
+-- Create a profile entry for the admin user
+INSERT INTO public.profiles (id, full_name, role)
+SELECT id, 'Sherwin Jefferson Tajan', 'Admin'
+FROM auth.users
+WHERE email = 'admin@sherwintajan.dev';
