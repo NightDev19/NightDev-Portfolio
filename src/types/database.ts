@@ -1,3 +1,7 @@
+// Supabase Database Types
+// This file provides type definitions for the Supabase client.
+// In production, you would generate this with: npx supabase gen types typescript
+
 export type Json =
   | string
   | number
@@ -208,5 +212,9 @@ export interface Database {
         }
       }
     }
+    Views: Record<string, never>
+    Functions: Record<string, never>
+    Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
   }
 }

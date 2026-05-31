@@ -2,13 +2,18 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getExperiences } from '@/features/experience/queries'
 import { DeleteExperienceButton } from './delete-button'
+import { AddExperienceForm } from './add-experience-form'
+import { EditExperienceDialog } from './edit-experience-dialog'
 
 export default async function AdminExperiencePage() {
   const experiences = await getExperiences()
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Experience</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Experience</h1>
+        <AddExperienceForm />
+      </div>
 
       <div className="rounded-lg border">
         <Table>
@@ -41,14 +46,17 @@ export default async function AdminExperiencePage() {
                   {exp.current && <Badge variant="secondary">Current</Badge>}
                 </TableCell>
                 <TableCell className="text-right">
-                  <DeleteExperienceButton experienceId={exp.id} />
+                  <div className="flex items-center justify-end gap-2">
+                    <EditExperienceDialog experience={exp} />
+                    <DeleteExperienceButton experienceId={exp.id} />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
             {experiences.length === 0 && (
               <TableRow>
                 <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                  No experience entries yet. Add them through Supabase.
+                  No experience entries yet. Add your first one!
                 </TableCell>
               </TableRow>
             )}
