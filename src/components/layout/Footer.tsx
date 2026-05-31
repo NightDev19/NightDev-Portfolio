@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Github, Linkedin, Mail, Terminal } from 'lucide-react'
+import Image from 'next/image'
+import { Github, Linkedin, Mail } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/constants'
 
 export function Footer() {
@@ -8,10 +9,16 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Brand */}
-          <div className="flex items-center gap-2">
-            <Terminal className="h-5 w-5 text-primary" />
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <Image
+              src="/logo.svg"
+              alt="SJT Logo"
+              width={28}
+              height={28}
+              className="transition-transform duration-300 group-hover:scale-110"
+            />
             <span className="font-bold text-lg">{SITE_CONFIG.name}</span>
-          </div>
+          </Link>
 
           {/* Links */}
           <div className="flex items-center gap-6 text-sm text-muted-foreground">

@@ -33,20 +33,43 @@ export const metadata: Metadata = {
     '.NET',
     'Avalonia UI',
     'Docker',
+    'C#',
+    'Node.js',
+    'PostgreSQL',
+    'Supabase',
   ],
-  authors: [{ name: 'Sherwin Jefferson Tajan' }],
+  authors: [{ name: 'Sherwin Jefferson Tajan', url: 'https://sherwintajan.dev' }],
+  creator: 'Sherwin Jefferson Tajan',
+  metadataBase: new URL('https://sherwintajan.dev'),
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/icon.svg',
+  },
   openGraph: {
     title: 'Sherwin Jefferson Tajan | Software Developer',
     description:
       'Software developer focused on full-stack engineering, desktop applications, and DevOps workflows.',
     type: 'website',
     locale: 'en_US',
+    url: 'https://sherwintajan.dev',
+    siteName: 'Sherwin Jefferson Tajan',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Sherwin Jefferson Tajan - Software Developer',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Sherwin Jefferson Tajan | Software Developer',
     description:
       'Software developer focused on full-stack engineering, desktop applications, and DevOps workflows.',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,

@@ -1,12 +1,13 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { ADMIN_NAV_LINKS } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { LogOut, Terminal } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export function AdminSidebar() {
@@ -22,8 +23,13 @@ export function AdminSidebar() {
 
   return (
     <aside className="hidden md:flex w-64 flex-col border-r bg-card">
-      <div className="flex items-center gap-2 px-6 py-5 border-b">
-        <Terminal className="h-5 w-5 text-primary" />
+      <div className="flex items-center gap-2.5 px-6 py-5 border-b">
+        <Image
+          src="/logo.svg"
+          alt="SJT Logo"
+          width={24}
+          height={24}
+        />
         <span className="font-bold">Admin Panel</span>
       </div>
 

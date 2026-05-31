@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Terminal } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NAV_LINKS } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
@@ -36,9 +37,16 @@ export function Navbar() {
       <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-            <Terminal className="h-5 w-5 text-primary" />
-            <span>SJT</span>
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <Image
+              src="/logo.svg"
+              alt="SJT Logo"
+              width={32}
+              height={32}
+              className="transition-transform duration-300 group-hover:scale-110"
+              priority
+            />
+            <span className="font-bold text-lg tracking-tight">SJT</span>
           </Link>
 
           {/* Desktop Nav */}

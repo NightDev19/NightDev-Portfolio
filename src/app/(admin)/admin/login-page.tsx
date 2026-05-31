@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Terminal, AlertCircle } from 'lucide-react'
+import Image from 'next/image'
+import { AlertCircle } from 'lucide-react'
 
 export function AdminLoginPage() {
   const [email, setEmail] = useState('')
@@ -41,7 +42,7 @@ export function AdminLoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-            <Terminal className="h-6 w-6 text-primary" />
+            <Image src="/logo.svg" alt="SJT Logo" width={32} height={32} />
           </div>
           <CardTitle className="text-2xl">Admin Login</CardTitle>
           <CardDescription>Sign in to manage your portfolio</CardDescription>

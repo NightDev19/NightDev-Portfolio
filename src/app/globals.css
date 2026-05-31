@@ -128,3 +128,16 @@
     scrollbar-color: var(--muted) transparent;
   }
 }
+
+/* Loading ellipsis animation */
+@keyframes ellipsis {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+
+.animate-ellipsis::after {
+  content: '';
+  animation: ellipsis 1.5s infinite;
+}
