@@ -1,16 +1,30 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { fallbackSkills } from '@/lib/fallback-data'
 import type { Skill } from './types'
 
-export async function getSkills(): Promise<Skill[]> {
-  const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
-    .from('skills')
-    .select('*')
-    .order('order_index', { ascending: true })
+function isSupabaseConfigured(): boolean {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  return !!url && !url.includes('your-project')
+}
 
-  if (error) {
-    console.error('Error fetching skills:', error)
-    return []
+export async function getSkills(): Promise<Skill[]> {
+  if (!isSupabaseConfigured()) {
+    return fallbackSkills
   }
-  return data as Skill[]
+
+  try {
+    const supabase = await createServerSupabaseClient()
+    const { data, error } = await supabase
+      .from('skills')
+      .select('*')
+      .order('order_index', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching skills:', error)
+      return fallbackSkills
+    }
+    return (data as Skill[]) || fallbackSkills
+  } catch {
+    return fallbackSkills
+  }
 }

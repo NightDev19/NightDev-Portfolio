@@ -1,16 +1,30 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { fallbackExperiences } from '@/lib/fallback-data'
 import type { Experience } from './types'
 
-export async function getExperiences(): Promise<Experience[]> {
-  const supabase = await createServerSupabaseClient()
-  const { data, error } = await supabase
-    .from('experiences')
-    .select('*')
-    .order('order_index', { ascending: true })
+function isSupabaseConfigured(): boolean {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  return !!url && !url.includes('your-project')
+}
 
-  if (error) {
-    console.error('Error fetching experiences:', error)
-    return []
+export async function getExperiences(): Promise<Experience[]> {
+  if (!isSupabaseConfigured()) {
+    return fallbackExperiences
   }
-  return data as Experience[]
+
+  try {
+    const supabase = await createServerSupabaseClient()
+    const { data, error } = await supabase
+      .from('experiences')
+      .select('*')
+      .order('order_index', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching experiences:', error)
+      return fallbackExperiences
+    }
+    return (data as Experience[]) || fallbackExperiences
+  } catch {
+    return fallbackExperiences
+  }
 }
