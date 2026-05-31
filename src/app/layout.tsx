@@ -1,0 +1,79 @@
+import type { Metadata } from 'next'
+import { Geist, Geist_Mono } from 'next/font/google'
+import { ThemeProvider } from 'next-themes'
+import './globals.css'
+import { Toaster } from '@/components/ui/sonner'
+
+const geistSans = Geist({
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+})
+
+const geistMono = Geist_Mono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+})
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Sherwin Jefferson Tajan | Software Developer',
+    template: '%s | Sherwin Jefferson Tajan',
+  },
+  description:
+    'Software developer focused on becoming a professional full stack software engineer. Working across frontend, backend, desktop applications, databases, Docker, DevOps workflows, and technical documentation.',
+  keywords: [
+    'Sherwin Jefferson Tajan',
+    'Software Developer',
+    'Full Stack Developer',
+    'React',
+    'Next.js',
+    'TypeScript',
+    'Python',
+    'FastAPI',
+    '.NET',
+    'Avalonia UI',
+    'Docker',
+  ],
+  authors: [{ name: 'Sherwin Jefferson Tajan' }],
+  openGraph: {
+    title: 'Sherwin Jefferson Tajan | Software Developer',
+    description:
+      'Software developer focused on full-stack engineering, desktop applications, and DevOps workflows.',
+    type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sherwin Jefferson Tajan | Software Developer',
+    description:
+      'Software developer focused on full-stack engineering, desktop applications, and DevOps workflows.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
+      </body>
+    </html>
+  )
+}
