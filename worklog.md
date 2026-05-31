@@ -1,35 +1,27 @@
 ---
 Task ID: 1
 Agent: Main Agent
-Task: Build full-stack developer portfolio for Sherwin Jefferson Tajan
+Task: Fix hydration mismatch and Invalid Server Actions request errors
 
 Work Log:
-- Initialized Next.js 16 project with fullstack-dev skill
-- Installed @supabase/supabase-js and @supabase/ssr packages
-- Created complete directory structure for (public) and (admin) route groups
-- Built Supabase SQL schema with all tables, RLS policies, triggers, and seed data
-- Created Supabase client (browser), server, admin, and middleware configurations
-- Built feature modules: projects, blog, skills, experience, contact, auth
-- Each feature has: types.ts, schemas.ts (Zod), queries.ts, actions.ts (server actions)
-- Built reusable UI components: SectionHeader, ProjectCard, SkillCard, BlogCard, TimelineItem, MotionWrapper
-- Built layout components: Navbar (with mobile menu, scroll detection), Footer
-- Built section components: HeroSection, AboutSection, SkillsSection, ProjectsSection, ExperienceSection, BlogSection, ContactSection
-- Built public pages: Home, About, Projects, Projects/[slug], Blog, Blog/[slug], Contact, Resume
-- Built admin dashboard with login, overview, CRUD for projects/blog/skills/experience/messages
-- Built middleware for session refresh and admin route protection
-- Built API route for contact form, auth callback route
-- Added SEO: metadata, OpenGraph, sitemap, robots.txt
-- Added Framer Motion animations: page fade-in, section reveal, card hover, button tap, hero stagger
-- Configured dark-mode-first color scheme with CSS variables
-- Added ThemeProvider (next-themes) for light/dark toggle
-- All lint checks pass
-- Created README with comprehensive setup instructions
+- Diagnosed hydration mismatch: `toLocaleDateString()` produces "May 31" on server (UTC) vs "June 1" on client (Asia/Manila UTC+8)
+- Created `formatDate()` and `formatShortDate()` utility functions in `src/lib/utils.ts` using UTC-based formatting with `timeZone: 'UTC'` to ensure consistent output between server and client
+- Updated all 8 files using `toLocaleDateString` to use the new UTC-based formatters
+- Diagnosed "Invalid Server Actions request" error — multiple root causes:
+  1. `auth/actions.ts` imported browser client (`createBrowserClient`) in a `'use server'` file, corrupting the server action module graph
+  2. Middleware `setAll` callback created new `NextResponse` objects that interfered with Server Action POST requests
+  3. Blog/project edit pages were `'use client'` components that imported server-only query functions (`getPostById`, `getProjectById`) which use `cookies()` from `next/headers`
+  4. `next.config.ts` had invalid `serverActions` key (not supported in Next.js 16.1.3)
+- Fixed `auth/actions.ts` to use `createAdminClient` instead of browser client
+- Updated middleware to detect Server Action requests (`Next-Action` header) and avoid creating new response objects for them
+- Restructured blog and project edit pages: page.tsx is now a server component that fetches data and passes it as props to a new client form component
+- Removed invalid `serverActions` config from `next.config.ts`
+- Cleared `.next` cache to remove stale action IDs
+- Verified dev server starts cleanly without config warnings
 
 Stage Summary:
-- Complete full-stack Next.js portfolio with 100+ source files
-- Public portfolio: 7 pages (Home, About, Projects, Blog, Contact, Resume, + detail pages)
-- Admin dashboard: 6 sections (Dashboard, Projects, Blog, Skills, Experience, Messages)
-- Supabase integration: Auth, RLS, server/client/admin clients
-- Framer Motion: Reusable animation variants in lib/motion.ts
-- Dark mode first with optional light mode
-- Ready for Supabase configuration (env vars needed)
+- All date formatting now uses UTC to prevent hydration mismatches
+- Server Actions should now work correctly after fixing: corrupted module graph, middleware interference, invalid config
+- Edit pages properly separated into server (data fetching) and client (form handling) components
+- Files created: `src/app/(admin)/admin/blog/[id]/edit/edit-form.tsx`, `src/app/(admin)/admin/projects/[id]/edit/edit-form.tsx`
+- Files modified: `src/lib/utils.ts`, `src/components/ui/BlogCard.tsx`, `src/components/ui/TimelineItem.tsx`, `src/features/auth/actions.ts`, `src/lib/supabase/middleware.ts`, `next.config.ts`, and 6 admin/public page files for date formatting

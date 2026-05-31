@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getAllProjectsAdmin } from '@/features/projects/queries'
 import { DeleteProjectButton } from './delete-button'
+import { formatDate } from '@/lib/utils'
 
 export default async function AdminProjectsPage() {
   const projects = await getAllProjectsAdmin()
@@ -47,7 +48,7 @@ export default async function AdminProjectsPage() {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-muted-foreground text-sm">
-                  {new Date(project.created_at).toLocaleDateString()}
+                  {formatDate(project.created_at)}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-2">

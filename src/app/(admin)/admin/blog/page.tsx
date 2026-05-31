@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getAllPostsAdmin } from '@/features/blog/queries'
 import { DeletePostButton } from './delete-button'
+import { formatDate } from '@/lib/utils'
 
 export default async function AdminBlogPage() {
   const posts = await getAllPostsAdmin()
@@ -43,7 +44,7 @@ export default async function AdminBlogPage() {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-muted-foreground text-sm">
-                  {new Date(post.created_at).toLocaleDateString()}
+                  {formatDate(post.created_at)}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-2">

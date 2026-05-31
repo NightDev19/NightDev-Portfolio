@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { MotionWrapper } from '@/components/sections/MotionWrapper'
 import { getProjectBySlug, getPublishedProjects } from '@/features/projects/queries'
+import { formatDate } from '@/lib/utils'
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>
@@ -97,11 +98,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <MotionWrapper delay={0.5}>
             <div className="mt-8 text-sm text-muted-foreground">
               Created on{' '}
-              {new Date(project.created_at).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
+              {formatDate(project.created_at)}
             </div>
           </MotionWrapper>
         </div>

@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getContactMessages } from '@/features/contact/actions'
 import { MarkReadButton } from './mark-read-button'
 import { DeleteMessageButton } from './delete-button'
+import { formatDate } from '@/lib/utils'
 
 export default async function AdminMessagesPage() {
   const messages = await getContactMessages()
@@ -25,7 +26,7 @@ export default async function AdminMessagesPage() {
                 <div className="flex items-center gap-2 shrink-0">
                   {!msg.read && <Badge variant="secondary">New</Badge>}
                   <span className="text-xs text-muted-foreground">
-                    {new Date(msg.created_at).toLocaleDateString()}
+                    {formatDate(msg.created_at)}
                   </span>
                 </div>
               </div>

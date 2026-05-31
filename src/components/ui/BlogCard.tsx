@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { cardHover } from '@/lib/motion'
+import { formatDate } from '@/lib/utils'
 import type { BlogPost } from '@/features/blog/types'
 
 interface BlogCardProps {
@@ -24,11 +25,7 @@ export function BlogCard({ post }: BlogCardProps) {
           </CardTitle>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4" />
-            {new Date(post.created_at).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
+            {formatDate(post.created_at)}
           </div>
         </CardHeader>
         <CardContent className="flex-1">

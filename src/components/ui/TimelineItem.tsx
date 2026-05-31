@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
+import { formatShortDate } from '@/lib/utils'
 import type { Experience } from '@/features/experience/types'
 
 interface TimelineItemProps {
@@ -42,18 +43,12 @@ export function TimelineItem({ experience, index }: TimelineItemProps) {
           )}
           {experience.start_date && (
             <p className="text-xs text-muted-foreground mb-3">
-              {new Date(experience.start_date).toLocaleDateString('en-US', {
-                month: 'short',
-                year: 'numeric',
-              })}
+              {formatShortDate(experience.start_date)}
               {' — '}
               {experience.current
                 ? 'Present'
                 : experience.end_date
-                  ? new Date(experience.end_date).toLocaleDateString('en-US', {
-                      month: 'short',
-                      year: 'numeric',
-                    })
+                  ? formatShortDate(experience.end_date)
                   : 'N/A'}
             </p>
           )}

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { MotionWrapper } from '@/components/sections/MotionWrapper'
 import { getPostBySlug, getPublishedPosts } from '@/features/blog/queries'
+import { formatDate } from '@/lib/utils'
 import ReactMarkdown from 'react-markdown'
 
 interface BlogPostPageProps {
@@ -59,11 +60,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div className="mt-3 flex items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
-                {new Date(post.created_at).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
+                {formatDate(post.created_at)}
               </div>
             </div>
           </MotionWrapper>

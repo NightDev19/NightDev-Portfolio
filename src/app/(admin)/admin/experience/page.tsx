@@ -4,6 +4,7 @@ import { getExperiences } from '@/features/experience/queries'
 import { DeleteExperienceButton } from './delete-button'
 import { AddExperienceForm } from './add-experience-form'
 import { EditExperienceDialog } from './edit-experience-dialog'
+import { formatShortDate } from '@/lib/utils'
 
 export default async function AdminExperiencePage() {
   const experiences = await getExperiences()
@@ -33,13 +34,13 @@ export default async function AdminExperiencePage() {
                 <TableCell className="text-muted-foreground">{exp.organization || '—'}</TableCell>
                 <TableCell className="text-sm text-muted-foreground">
                   {exp.start_date
-                    ? new Date(exp.start_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+                    ? formatShortDate(exp.start_date)
                     : '—'}
                   {' → '}
                   {exp.current
                     ? 'Present'
                     : exp.end_date
-                      ? new Date(exp.end_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+                      ? formatShortDate(exp.end_date)
                       : '—'}
                 </TableCell>
                 <TableCell>

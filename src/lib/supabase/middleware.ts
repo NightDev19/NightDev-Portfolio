@@ -2,6 +2,11 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
+  // For Server Action requests, we need to be careful about modifying the response.
+  // Server Actions send POST requests with the Next-Action header.
+  // We still process auth (for session refresh) but handle the response carefully.
+  const isServerAction = request.headers.get('Next-Action') !== null
+
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -18,9 +23,14 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           )
-          supabaseResponse = NextResponse.next({
-            request,
-          })
+          // For Server Action requests, avoid creating a new response object
+          // as it can interfere with the action resolution.
+          // Just set cookies on the existing response instead.
+          if (!isServerAction) {
+            supabaseResponse = NextResponse.next({
+              request,
+            })
+          }
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           )

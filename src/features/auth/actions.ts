@@ -1,10 +1,20 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/client'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 
 export async function loginWithEmail(email: string, password: string) {
-  // This is used from client-side, but we keep it as a server action for potential use
+  // Validate credentials server-side
+  const supabase = createAdminClient()
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
   revalidatePath('/admin')
   return { success: true }
 }
