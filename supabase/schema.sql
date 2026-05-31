@@ -61,6 +61,7 @@ CREATE TABLE public.blog_posts (
   slug TEXT UNIQUE NOT NULL,
   excerpt TEXT,
   content TEXT NOT NULL,
+  cover_image TEXT,
   tags TEXT[],
   published BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -173,6 +174,39 @@ CREATE POLICY "Anyone insert messages" ON public.contact_messages FOR INSERT WIT
 CREATE POLICY "Auth users view messages" ON public.contact_messages FOR SELECT USING (auth.role() = 'authenticated');
 CREATE POLICY "Auth users update messages" ON public.contact_messages FOR UPDATE USING (auth.role() = 'authenticated');
 CREATE POLICY "Auth users delete messages" ON public.contact_messages FOR DELETE USING (auth.role() = 'authenticated');
+
+-- ============================================
+-- Storage: Blog Images Bucket
+-- ============================================
+-- Insert the storage bucket for blog images
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'blog-images',
+  'blog-images',
+  true,
+  5242880,  -- 5MB limit
+  ARRAY['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml']
+) ON CONFLICT (id) DO UPDATE SET
+  public = true,
+  file_size_limit = 5242880,
+  allowed_mime_types = ARRAY['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+
+-- Storage policies: anyone can view (public bucket), only auth users can upload/delete
+CREATE POLICY "Blog images are publicly viewable"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'blog-images');
+
+CREATE POLICY "Auth users can upload blog images"
+  ON storage.objects FOR INSERT
+  WITH CHECK (bucket_id = 'blog-images' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Auth users can update blog images"
+  ON storage.objects FOR UPDATE
+  USING (bucket_id = 'blog-images' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Auth users can delete blog images"
+  ON storage.objects FOR DELETE
+  USING (bucket_id = 'blog-images' AND auth.role() = 'authenticated');
 
 -- ============================================
 -- Seed Data: Skills

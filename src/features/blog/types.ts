@@ -4,6 +4,7 @@ export interface BlogPost {
   slug: string
   excerpt: string | null
   content: string
+  cover_image: string | null
   tags: string[] | null
   published: boolean
   created_at: string

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, Calendar, Tag } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -26,6 +27,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   return {
     title: post.title,
     description: post.excerpt || post.content.substring(0, 160),
+    openGraph: post.cover_image
+      ? { images: [{ url: post.cover_image }] }
+      : undefined,
   }
 }
 
@@ -74,6 +78,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     {tag}
                   </Badge>
                 ))}
+              </div>
+            </MotionWrapper>
+          )}
+
+          {/* Cover Image */}
+          {post.cover_image && (
+            <MotionWrapper delay={0.28}>
+              <div className="mt-6 relative w-full aspect-video rounded-lg overflow-hidden bg-muted">
+                <Image
+                  src={post.cover_image}
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 768px"
+                  priority
+                />
               </div>
             </MotionWrapper>
           )}

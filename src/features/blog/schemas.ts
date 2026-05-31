@@ -8,6 +8,7 @@ export const blogPostSchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase with hyphens'),
   excerpt: z.string().optional(),
   content: z.string().min(1, 'Content is required'),
+  cover_image: z.string().optional(),
   tags: z.array(z.string()).optional(),
   published: z.boolean().optional(),
 })

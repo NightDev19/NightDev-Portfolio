@@ -10,16 +10,20 @@ import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ImageIcon, X } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { blogPostSchema, type BlogPostFormData } from '@/features/blog/schemas'
 import { createBlogPost } from '@/features/blog/actions'
+import { ImageUploader } from '@/components/ui/ImageUploader'
+import { ImageGallery } from '@/components/ui/ImageGallery'
 import { toast } from 'sonner'
 
 export default function NewBlogPostPage() {
   const router = useRouter()
   const [tagInput, setTagInput] = useState('')
   const [tags, setTags] = useState<string[]>([])
+  const [coverImage, setCoverImage] = useState<string>('')
 
   const {
     register,
@@ -28,7 +32,7 @@ export default function NewBlogPostPage() {
     formState: { errors, isSubmitting },
   } = useForm<BlogPostFormData>({
     resolver: zodResolver(blogPostSchema),
-    defaultValues: { tags: [], published: false },
+    defaultValues: { tags: [], published: false, cover_image: '' },
   })
 
   function addTag() {
@@ -45,6 +49,37 @@ export default function NewBlogPostPage() {
     const updated = tags.filter((t) => t !== tag)
     setTags(updated)
     setValue('tags', updated)
+  }
+
+  function handleInsertToContent(markdown: string) {
+    // Get the current content from the textarea and append
+    const textarea = document.getElementById('content') as HTMLTextAreaElement
+    if (textarea) {
+      const start = textarea.selectionStart
+      const end = textarea.selectionEnd
+      const currentContent = textarea.value
+      const newContent =
+        currentContent.substring(0, start) +
+        '\n' +
+        markdown +
+        '\n' +
+        currentContent.substring(end)
+      setValue('content', newContent, { shouldValidate: true })
+    } else {
+      const currentVal = document.querySelector<HTMLInputElement>('#content')?.value || ''
+      setValue('content', currentVal + '\n' + markdown + '\n', { shouldValidate: true })
+    }
+    toast.success('Image inserted into content')
+  }
+
+  function handleSelectCover(url: string) {
+    setCoverImage(url)
+    setValue('cover_image', url)
+  }
+
+  function handleRemoveCover() {
+    setCoverImage('')
+    setValue('cover_image', '')
   }
 
   async function onSubmit(data: BlogPostFormData) {
@@ -90,10 +125,73 @@ export default function NewBlogPostPage() {
               <Textarea id="excerpt" rows={2} {...register('excerpt')} className="mt-1.5" />
             </div>
 
+            {/* Cover Image */}
             <div>
-              <Label htmlFor="content">Content (Markdown)</Label>
-              <Textarea id="content" rows={15} {...register('content')} className="mt-1.5 font-mono text-sm" />
+              <Label>Cover Image</Label>
+              <div className="mt-1.5 space-y-3">
+                {coverImage ? (
+                  <div className="relative rounded-lg overflow-hidden border bg-muted">
+                    <div className="relative w-full h-48">
+                      <Image
+                        src={coverImage}
+                        alt="Cover"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 640px"
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-2 right-2"
+                      onClick={handleRemoveCover}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                    <div className="p-3 bg-muted/50">
+                      <p className="text-xs text-muted-foreground truncate">{coverImage}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <ImageGallery
+                      onSelectCover={handleSelectCover}
+                      onInsertToContent={handleInsertToContent}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Content with image tools */}
+            <div>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="content">Content (Markdown)</Label>
+                <ImageGallery onInsertToContent={handleInsertToContent} />
+              </div>
+              <Textarea
+                id="content"
+                rows={15}
+                {...register('content')}
+                className="mt-1.5 font-mono text-sm"
+              />
               {errors.content && <p className="mt-1 text-sm text-destructive">{errors.content.message}</p>}
+            </div>
+
+            {/* Image Upload Section */}
+            <div className="rounded-lg border p-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="h-4 w-4 text-muted-foreground" />
+                <Label className="text-sm font-medium">Upload Images</Label>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Upload images to use in your blog post. After uploading, click &quot;Insert&quot; to add the image to your content, or &quot;Copy URL&quot; to use it elsewhere.
+              </p>
+              <ImageUploader
+                onInsertToContent={handleInsertToContent}
+                folder="blog"
+              />
             </div>
 
             <div>

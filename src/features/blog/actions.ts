@@ -11,6 +11,7 @@ export async function createBlogPost(data: BlogPostFormData) {
     slug: data.slug,
     excerpt: data.excerpt || null,
     content: data.content,
+    cover_image: data.cover_image || null,
     tags: data.tags || [],
     published: data.published ?? false,
   })
@@ -31,6 +32,7 @@ export async function updateBlogPost(id: string, data: Partial<BlogPostFormData>
     .update({
       ...data,
       excerpt: data.excerpt || null,
+      cover_image: data.cover_image || null,
       tags: data.tags || [],
     })
     .eq('id', id)

@@ -25,3 +25,34 @@ Stage Summary:
 - Edit pages properly separated into server (data fetching) and client (form handling) components
 - Files created: `src/app/(admin)/admin/blog/[id]/edit/edit-form.tsx`, `src/app/(admin)/admin/projects/[id]/edit/edit-form.tsx`
 - Files modified: `src/lib/utils.ts`, `src/components/ui/BlogCard.tsx`, `src/components/ui/TimelineItem.tsx`, `src/features/auth/actions.ts`, `src/lib/supabase/middleware.ts`, `next.config.ts`, and 6 admin/public page files for date formatting
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Add blog image upload with Supabase Storage blob storage
+
+Work Log:
+- Added `cover_image TEXT` column to `blog_posts` table in schema.sql
+- Created `blog-images` Supabase Storage bucket config in schema.sql (public, 5MB limit, JPEG/PNG/GIF/WebP/SVG)
+- Added storage RLS policies (public view, auth upload/update/delete)
+- Created migration SQL file for adding to existing database
+- Created 3 API routes for client-side image operations:
+  - `/api/storage/upload` — POST, handles file upload to Supabase Storage with date-based folder structure (blog/YYYY/MM/timestamp-random.ext)
+  - `/api/storage/list` — GET, lists all images in bucket recursively with public URLs
+  - `/api/storage/delete` — POST, deletes image by path
+- Created `ImageUploader` component with drag & drop, file picker, progress bar, uploaded image list with Insert/Copy URL actions
+- Created `ImageGallery` component with searchable grid, hover actions (Insert, Cover, Copy URL, Delete)
+- Updated blog types, schemas, and actions to include `cover_image` field
+- Updated blog new/edit pages with: cover image preview/selector, ImageGallery browser, ImageUploader section, insert-to-content functionality
+- Updated public BlogCard and blog detail page to display cover images
+- Updated fallback data with `cover_image: null`
+- Configured Next.js `images.remotePatterns` for Supabase storage CDN
+
+Stage Summary:
+- Full blog image upload system using Supabase Storage as blob storage
+- Images stored in `blog-images` bucket with date-based folder structure
+- Public CDN URLs for fast delivery
+- Cover image support for blog posts
+- Insert images directly into markdown content from editor
+- Browse existing image library and manage (delete, copy URL)
+- Migration SQL provided for existing databases
