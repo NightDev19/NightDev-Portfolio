@@ -2,6 +2,8 @@ import { getCurrentUser } from '@/features/auth/queries'
 import { AdminSidebar } from './admin-sidebar'
 import { AdminLoginPage } from './admin/login-page'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminLayout({
   children,
 }: {

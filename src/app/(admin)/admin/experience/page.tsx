@@ -1,4 +1,6 @@
 import { Badge } from '@/components/ui/badge'
+
+export const dynamic = 'force-dynamic'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getExperiences } from '@/features/experience/queries'
 import { DeleteExperienceButton } from './delete-button'

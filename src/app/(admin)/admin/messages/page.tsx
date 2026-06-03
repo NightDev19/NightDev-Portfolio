@@ -1,4 +1,6 @@
 import { Badge } from '@/components/ui/badge'
+
+export const dynamic = 'force-dynamic'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getContactMessages } from '@/features/contact/actions'
 import { MarkReadButton } from './mark-read-button'

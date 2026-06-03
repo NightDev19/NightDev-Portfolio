@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation'
+
+export const dynamic = 'force-dynamic'
 import { getPostById } from '@/features/blog/queries'
 import { EditBlogPostForm } from './edit-form'
 

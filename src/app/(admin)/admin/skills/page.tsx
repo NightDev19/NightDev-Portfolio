@@ -1,4 +1,6 @@
 import { Badge } from '@/components/ui/badge'
+
+export const dynamic = 'force-dynamic'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getSkills } from '@/features/skills/queries'
 import { DeleteSkillButton } from './delete-button'

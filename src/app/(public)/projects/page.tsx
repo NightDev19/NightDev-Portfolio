@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+
+export const dynamic = 'force-dynamic'
 import { MotionWrapper } from '@/components/sections/MotionWrapper'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { ProjectCard } from '@/components/ui/ProjectCard'
@@ -15,18 +17,19 @@ export default async function ProjectsPage() {
 
   return (
     <div className="pt-20">
-      <section className="py-20 px-4">
-        <div className="mx-auto max-w-6xl">
+      <section className="py-20 px-6">
+        <div className="mx-auto max-w-5xl">
           <MotionWrapper>
             <SectionHeader
-              title="Projects"
+              label="Projects"
+              title="Selected Work"
               subtitle="A collection of projects that demonstrate my skills across different areas of software development."
             />
           </MotionWrapper>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {projects.map((project, index) => (
-              <MotionWrapper key={project.id} delay={index * 0.1}>
+              <MotionWrapper key={project.id} delay={index * 0.05}>
                 <ProjectCard project={project} />
               </MotionWrapper>
             ))}

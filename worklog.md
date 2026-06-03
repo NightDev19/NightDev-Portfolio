@@ -1,58 +1,60 @@
 ---
 Task ID: 1
 Agent: Main Agent
-Task: Fix hydration mismatch and Invalid Server Actions request errors
+Task: Professional UI Redesign with TripleD-inspired styling
 
 Work Log:
-- Diagnosed hydration mismatch: `toLocaleDateString()` produces "May 31" on server (UTC) vs "June 1" on client (Asia/Manila UTC+8)
-- Created `formatDate()` and `formatShortDate()` utility functions in `src/lib/utils.ts` using UTC-based formatting with `timeZone: 'UTC'` to ensure consistent output between server and client
-- Updated all 8 files using `toLocaleDateString` to use the new UTC-based formatters
-- Diagnosed "Invalid Server Actions request" error — multiple root causes:
-  1. `auth/actions.ts` imported browser client (`createBrowserClient`) in a `'use server'` file, corrupting the server action module graph
-  2. Middleware `setAll` callback created new `NextResponse` objects that interfered with Server Action POST requests
-  3. Blog/project edit pages were `'use client'` components that imported server-only query functions (`getPostById`, `getProjectById`) which use `cookies()` from `next/headers`
-  4. `next.config.ts` had invalid `serverActions` key (not supported in Next.js 16.1.3)
-- Fixed `auth/actions.ts` to use `createAdminClient` instead of browser client
-- Updated middleware to detect Server Action requests (`Next-Action` header) and avoid creating new response objects for them
-- Restructured blog and project edit pages: page.tsx is now a server component that fetches data and passes it as props to a new client form component
-- Removed invalid `serverActions` config from `next.config.ts`
-- Cleared `.next` cache to remove stale action IDs
-- Verified dev server starts cleanly without config warnings
+- Analyzed user's reference images using VLM (Vision Language Model)
+  - Image 1: Dark skills section with category cards, pill badges, icon containers
+  - Image 2: Dark project cards with "Featured" badge, tech stack pills, Code/Details links
+- Read all current section components and UI sub-components
+- Researched TripleD UI component library (https://ui.tripled.work/components)
+- Delegated comprehensive UI overhaul to full-stack-developer agent
+- Agent redesigned all components with professional styling:
+  - globals.css: Darker dark theme (oklch 0.08 bg, 0.13 card)
+  - SectionHeader: Added thin primary accent line below titles
+  - SkillCard: Added bg-primary/10 icon containers, consistent pill badges
+  - ProjectCard: Removed image section, added Featured badge, Code/Details footer
+  - BlogCard: Compact card layout with border-t footer, Read → link
+  - TimelineItem: Card-wrapped entries with hover effect, smaller dots
+  - HeroSection: Added accent line between role and description
+  - AboutSection: Icon containers with bg-primary/10 backgrounds
+  - ContactSection: Card-wrapped info section, icon containers
+  - Navbar: backdrop-blur-lg + shadow-sm when scrolled
+  - Footer: border-t copyright divider, hover effects
+- Fixed build: Added force-dynamic to admin layout
+- Made middleware resilient to missing Supabase credentials
+- Updated query functions to check both SUPABASE_URL and SUPABASE_ANON_KEY
+- Build compiles successfully
 
 Stage Summary:
-- All date formatting now uses UTC to prevent hydration mismatches
-- Server Actions should now work correctly after fixing: corrupted module graph, middleware interference, invalid config
-- Edit pages properly separated into server (data fetching) and client (form handling) components
-- Files created: `src/app/(admin)/admin/blog/[id]/edit/edit-form.tsx`, `src/app/(admin)/admin/projects/[id]/edit/edit-form.tsx`
-- Files modified: `src/lib/utils.ts`, `src/components/ui/BlogCard.tsx`, `src/components/ui/TimelineItem.tsx`, `src/features/auth/actions.ts`, `src/lib/supabase/middleware.ts`, `next.config.ts`, and 6 admin/public page files for date formatting
-
+- All 13+ components redesigned with professional, TripleD-inspired styling
+- Darker, richer color palette with better card/background contrast
+- Consistent icon containers (bg-primary/10), pill badges, accent lines
+- Fixed alignment issues with consistent max-w-5xl, py-24 px-6, gap spacing
+- Build passes: ✓ Compiled successfully
 ---
-Task ID: 2
+Task ID: 1
 Agent: Main Agent
-Task: Add blog image upload with Supabase Storage blob storage
+Task: Redesign portfolio UI with professional styling, fix alignment issues, and use UI TripleD-inspired components
 
 Work Log:
-- Added `cover_image TEXT` column to `blog_posts` table in schema.sql
-- Created `blog-images` Supabase Storage bucket config in schema.sql (public, 5MB limit, JPEG/PNG/GIF/WebP/SVG)
-- Added storage RLS policies (public view, auth upload/update/delete)
-- Created migration SQL file for adding to existing database
-- Created 3 API routes for client-side image operations:
-  - `/api/storage/upload` — POST, handles file upload to Supabase Storage with date-based folder structure (blog/YYYY/MM/timestamp-random.ext)
-  - `/api/storage/list` — GET, lists all images in bucket recursively with public URLs
-  - `/api/storage/delete` — POST, deletes image by path
-- Created `ImageUploader` component with drag & drop, file picker, progress bar, uploaded image list with Insert/Copy URL actions
-- Created `ImageGallery` component with searchable grid, hover actions (Insert, Cover, Copy URL, Delete)
-- Updated blog types, schemas, and actions to include `cover_image` field
-- Updated blog new/edit pages with: cover image preview/selector, ImageGallery browser, ImageUploader section, insert-to-content functionality
-- Updated public BlogCard and blog detail page to display cover images
-- Updated fallback data with `cover_image: null`
-- Configured Next.js `images.remotePatterns` for Supabase storage CDN
+- Analyzed uploaded screenshots using VLM to identify specific issues: misaligned grid layouts, plain monotonous design, lack of visual hierarchy, inconsistent card spacing, no color coding
+- Fetched UI TripleD component library documentation from https://ui.tripled.work/components - learned about glassmorphism patterns, gradient accents, glow effects, animated borders, and professional card designs
+- Attempted to install TripleD components via shadcn CLI but registry endpoint returned HTML not JSON - decided to implement custom components inspired by the library
+- Redesigned globals.css: Added glassmorphism utilities (.glass, .glass-card, .glass-nav), glow effects (.glow-primary, .glow-primary-sm), gradient text (.gradient-text, .gradient-text-subtle), shimmer hover effect, noise background texture, animated border with conic-gradient, float/pulse-glow animations
+- Redesigned SectionHeader: Added uppercase tracking label with decorative lines, gradient text for title, animated gradient divider line, staggered reveal animations
+- Redesigned HeroSection: Added background gradient orbs and grid pattern, status badge with ping animation, sparkles icon, gradient text on name, scroll indicator with dot animation, glow effects on CTA button
+- Redesigned AboutSection: Added color-coded icons with gradient backgrounds per category, shimmer hover effect, glow on hover, top gradient bar accent
+- Redesigned SkillCard: Added per-category color configuration (blue/emerald/purple/amber/rose), gradient icon backgrounds, animated skill tag reveals, shimmer hover effect, proper spacing and alignment
+- Redesigned ProjectCard: Added top gradient accent bar, shimmer hover effect, glow on hover, better typography hierarchy, improved badge styling, proper tag spacing
+- Redesigned TimelineItem: Added gradient timeline line, ping animation for current position, left accent bar on hover, shimmer effect, improved spacing
+- Redesigned BlogCard: Added top accent line, shimmer hover, gradient placeholder for missing images, better tag styling
+- Redesigned ContactSection: Glass card styling for both info and form, top gradient accents, better labeled fields with background styling, full-width submit button with glow
+- Redesigned Navbar: Added Terminal icon in logo container, glassmorphism on scroll, animated theme toggle with rotation, gradient active indicator, divider before theme toggle
+- Redesigned Footer: Added top gradient line, Terminal icon logo, improved social link styling, better spacing
 
 Stage Summary:
-- Full blog image upload system using Supabase Storage as blob storage
-- Images stored in `blog-images` bucket with date-based folder structure
-- Public CDN URLs for fast delivery
-- Cover image support for blog posts
-- Insert images directly into markdown content from editor
-- Browse existing image library and manage (delete, copy URL)
-- Migration SQL provided for existing databases
+- All components successfully redesigned with professional UI inspired by UI TripleD library
+- Build passes with no errors
+- Key improvements: glassmorphism effects, gradient accents, glow hover states, color-coded skill categories, proper grid alignment, visual hierarchy, animated elements, shimmer hover effects

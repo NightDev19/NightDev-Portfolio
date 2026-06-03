@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+
+export const dynamic = 'force-dynamic'
 import { MotionWrapper } from '@/components/sections/MotionWrapper'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { Code2, Database, Layers, Server, Wrench, GraduationCap } from 'lucide-react'
@@ -16,37 +18,37 @@ const highlights = [
     icon: Code2,
     title: 'Frontend Development',
     description:
-      'Building responsive, accessible, and performant user interfaces with React, Next.js, Vue 3, TypeScript, and Tailwind CSS. Focused on clean component architecture, reusable design patterns, and seamless user experiences that scale across devices.',
+      'Building responsive, accessible, and performant user interfaces with React, Next.js, Vue 3, TypeScript, and Tailwind CSS. Focused on clean component architecture and seamless user experiences.',
   },
   {
     icon: Server,
     title: 'Backend Development',
     description:
-      'Designing APIs and server-side logic with Python, FastAPI, Django, Node.js, Express, C#, and .NET 8. Experienced in building RESTful services, authentication systems, and data processing pipelines with clean separation of concerns.',
+      'Designing APIs and server-side logic with Python, FastAPI, Django, Node.js, Express, C#, and .NET 8. Experienced in RESTful services, authentication systems, and data processing pipelines.',
   },
   {
     icon: Layers,
     title: 'Desktop Applications',
     description:
-      'Creating cross-platform desktop apps with Avalonia UI, MVVM architecture, and .NET 8 with Entity Framework Core. Built production-ready features including RBAC, dashboards, device monitoring, and responsive layouts.',
+      'Creating cross-platform desktop apps with Avalonia UI, MVVM architecture, and .NET 8 with Entity Framework Core. Built production-ready features including RBAC and dashboards.',
   },
   {
     icon: Database,
     title: 'Database Management',
     description:
-      'Working with PostgreSQL, Supabase, SQLite, MongoDB, and Redis for data persistence and caching strategies. Experienced in schema design, migrations with EF Core, and query optimization.',
+      'Working with PostgreSQL, Supabase, SQLite, MongoDB, and Redis for data persistence and caching. Experienced in schema design, migrations, and query optimization.',
   },
   {
     icon: Wrench,
     title: 'DevOps & Tooling',
     description:
-      'Containerizing applications with Docker and Docker Compose, managing Git workflows, and working in Linux environments. Building reproducible development environments and CI/CD-ready configurations.',
+      'Containerizing applications with Docker and Docker Compose, managing Git workflows, and working in Linux environments. Building reproducible development environments.',
   },
   {
     icon: GraduationCap,
     title: 'Continuous Learning',
     description:
-      'Always exploring new technologies — from system design fundamentals to OpenSearch, Redis, and advanced authentication patterns. Documenting learnings to reinforce understanding and share with the community.',
+      'Always exploring new technologies — from system design fundamentals to OpenSearch, Redis, and advanced authentication patterns. Documenting learnings to share with the community.',
   },
 ]
 
@@ -55,37 +57,35 @@ export default async function AboutPage() {
 
   return (
     <div className="pt-20">
-      {/* About Intro */}
-      <section className="py-20 px-4">
-        <div className="mx-auto max-w-4xl">
+      {/* Intro */}
+      <section className="py-20 px-6">
+        <div className="mx-auto max-w-3xl">
           <MotionWrapper>
             <SectionHeader
-              title="About Me"
-              subtitle="A developer focused on full-stack engineering, clean architecture, and continuous technical growth."
+              label="About"
+              title="Sherwin Jefferson Tajan"
+              align="left"
             />
           </MotionWrapper>
 
-          <MotionWrapper delay={0.2}>
-            <div className="mt-8 prose prose-neutral dark:prose-invert max-w-none">
-              <p className="text-muted-foreground leading-relaxed">
-                I&apos;m Sherwin Jefferson Tajan, a software developer driven by the goal of becoming
-                a professional full-stack software engineer. My journey spans across frontend and
-                backend web development, desktop application development, database management, and
-                DevOps practices. I believe in writing maintainable code, building clean
-                architectures, and creating user interfaces that are both readable and functional.
+          <MotionWrapper delay={0.1}>
+            <div className="mt-6 space-y-4 text-sm text-muted-foreground leading-relaxed">
+              <p>
+                I&apos;m a software developer driven by the goal of becoming a professional
+                full-stack software engineer. My journey spans across frontend and backend web
+                development, desktop application development, database management, and DevOps
+                practices. I believe in writing maintainable code, building clean architectures,
+                and creating user interfaces that are both readable and functional.
               </p>
-              <p className="text-muted-foreground leading-relaxed mt-4">
+              <p>
                 Whether I&apos;m building a desktop application with Avalonia UI and .NET 8, setting
                 up Docker Compose environments for full-stack projects, or implementing
                 authentication and role-based access control systems, I approach every project as an
                 opportunity to learn and grow as an engineer.
               </p>
-              <p className="text-muted-foreground leading-relaxed mt-4">
+              <p>
                 I value practical engineering over theoretical perfection. Every line of code I write
-                is aimed at solving real problems with maintainable, well-documented solutions. I
-                document my learning journey through technical notes and blog posts, covering topics
-                from Docker Compose and Redis to Avalonia MVVM patterns and system design
-                fundamentals.
+                is aimed at solving real problems with maintainable, well-documented solutions.
               </p>
             </div>
           </MotionWrapper>
@@ -93,24 +93,25 @@ export default async function AboutPage() {
       </section>
 
       {/* Highlights */}
-      <section className="py-20 px-4 bg-muted/30">
-        <div className="mx-auto max-w-6xl">
+      <section className="py-20 px-6 bg-muted/30">
+        <div className="mx-auto max-w-5xl">
           <MotionWrapper>
             <SectionHeader
+              label="Expertise"
               title="What I Do"
               subtitle="Core areas of expertise and focus."
             />
           </MotionWrapper>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {highlights.map((item, index) => (
-              <MotionWrapper key={item.title} delay={index * 0.1}>
-                <div className="rounded-lg border bg-card p-6 h-full transition-colors hover:border-primary/50">
-                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                    <item.icon className="h-5 w-5 text-primary" />
+              <MotionWrapper key={item.title} delay={index * 0.05}>
+                <div className="rounded-lg border bg-card p-5 h-full transition-colors hover:border-primary/30">
+                  <div className="mb-3">
+                    <item.icon className="h-4 w-4 text-primary" />
                   </div>
-                  <h3 className="font-semibold mb-2">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <h3 className="font-medium text-sm mb-1.5">{item.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
                     {item.description}
                   </p>
                 </div>
