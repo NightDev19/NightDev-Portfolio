@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const LETTERS = ['S', 'J', 'T']
+const LETTERS = ['N', 'i', 'g', 'h', 't', 'D', 'e', 'v']
 
 export function SplashScreen({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
@@ -27,16 +27,16 @@ export function SplashScreen({ children }: { children: React.ReactNode }) {
           >
             <div className="flex flex-col items-center gap-8">
               {/* Monogram with staggered letter reveal */}
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-0">
                 {LETTERS.map((letter, i) => (
                   <motion.span
-                    key={letter}
-                    className="font-mono text-3xl font-semibold tracking-tight text-foreground"
+                    key={`${letter}-${i}`}
+                    className={`font-mono text-3xl font-semibold tracking-tight ${i < 5 ? 'text-foreground' : 'text-primary'}`}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
-                      duration: 0.4,
-                      delay: 0.3 + i * 0.12,
+                      duration: 0.35,
+                      delay: 0.2 + i * 0.06,
                       ease: 'easeOut',
                     }}
                   >

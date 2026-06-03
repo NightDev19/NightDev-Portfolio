@@ -42,7 +42,7 @@ export function AdminLoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-            <Image src="/logo.svg" alt="SJT Logo" width={32} height={32} />
+            <Image src="/icon.svg" alt="NightDev Logo" width={32} height={32} />
           </div>
           <CardTitle className="text-2xl">Admin Login</CardTitle>
           <CardDescription>Sign in to manage your portfolio</CardDescription>

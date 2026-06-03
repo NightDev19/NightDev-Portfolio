@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Github, Linkedin, Mail, Terminal, Heart } from 'lucide-react'
+import { Github, Linkedin, Mail } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/constants'
 
 export function Footer() {
@@ -18,11 +18,16 @@ export function Footer() {
           {/* Brand */}
           <div className="text-center md:text-left">
             <Link href="/" className="group inline-flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 group-hover:bg-primary/15 group-hover:border-primary/30 transition-all duration-200">
-                <Terminal className="h-4 w-4 text-primary" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden bg-primary/10 border border-primary/20 group-hover:bg-primary/15 group-hover:border-primary/30 transition-all duration-200">
+                <img
+                  src="/icon.svg"
+                  alt="NightDev"
+                  className="h-6 w-6"
+                  aria-hidden="true"
+                />
               </div>
               <span className="font-mono text-lg font-semibold tracking-tight group-hover:text-primary transition-colors duration-200">
-                SJT
+                {SITE_CONFIG.name}
               </span>
             </Link>
             <p className="text-xs text-muted-foreground mt-2">

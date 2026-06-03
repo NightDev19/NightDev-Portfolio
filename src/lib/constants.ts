@@ -1,5 +1,5 @@
 export const SITE_CONFIG = {
-  name: 'Sherwin Jefferson Tajan',
+  name: 'NightDev',
   role: 'Software Developer / Full Stack Developer',
   description:
     'Software developer focused on becoming a professional full stack software engineer. Working across frontend, backend, desktop applications, databases, Docker, DevOps workflows, and technical documentation.',

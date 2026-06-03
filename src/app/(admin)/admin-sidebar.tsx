@@ -25,8 +25,8 @@ export function AdminSidebar() {
     <aside className="hidden md:flex w-64 flex-col border-r bg-card">
       <div className="flex items-center gap-2.5 px-6 py-5 border-b">
         <Image
-          src="/logo.svg"
-          alt="SJT Logo"
+          src="/icon.svg"
+          alt="NightDev Logo"
           width={24}
           height={24}
         />

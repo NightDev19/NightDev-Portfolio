@@ -19,12 +19,13 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Sherwin Jefferson Tajan | Software Developer',
-    template: '%s | Sherwin Jefferson Tajan',
+    default: 'NightDev | Software Developer',
+    template: '%s | NightDev',
   },
   description:
     'Software developer focused on becoming a professional full stack software engineer. Working across frontend, backend, desktop applications, databases, Docker, DevOps workflows, and technical documentation.',
   keywords: [
+    'NightDev',
     'Sherwin Jefferson Tajan',
     'Software Developer',
     'Full Stack Developer',
@@ -41,8 +42,8 @@ export const metadata: Metadata = {
     'PostgreSQL',
     'Supabase',
   ],
-  authors: [{ name: 'Sherwin Jefferson Tajan', url: 'https://sherwintajan.dev' }],
-  creator: 'Sherwin Jefferson Tajan',
+  authors: [{ name: 'NightDev', url: 'https://sherwintajan.dev' }],
+  creator: 'NightDev',
   metadataBase: new URL('https://sherwintajan.dev'),
   icons: {
     icon: [
@@ -51,25 +52,25 @@ export const metadata: Metadata = {
     apple: '/icon.svg',
   },
   openGraph: {
-    title: 'Sherwin Jefferson Tajan | Software Developer',
+    title: 'NightDev | Software Developer',
     description:
       'Software developer focused on full-stack engineering, desktop applications, and DevOps workflows.',
     type: 'website',
     locale: 'en_US',
     url: 'https://sherwintajan.dev',
-    siteName: 'Sherwin Jefferson Tajan',
+    siteName: 'NightDev',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Sherwin Jefferson Tajan - Software Developer',
+        alt: 'NightDev - Software Developer',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sherwin Jefferson Tajan | Software Developer',
+    title: 'NightDev | Software Developer',
     description:
       'Software developer focused on full-stack engineering, desktop applications, and DevOps workflows.',
     images: ['/og-image.png'],

@@ -1,187 +1,397 @@
-'use client'
+"use client";
 
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowDown, Download, Mail, Sparkles } from 'lucide-react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { SITE_CONFIG } from '@/lib/constants'
-import { useState, useEffect } from 'react'
+import { motion, type Variants } from "framer-motion";
+import { ArrowRight, Sparkles, Download, Mail } from "lucide-react";
+import { useEffect, useRef } from "react";
+import Link from "next/link";
 
-const ROLES = [
-  'Full Stack Developer',
-  'Software Engineer',
-  'Desktop App Developer',
-]
+import { Button } from "@/components/ui/button";
+import { SITE_CONFIG } from "@/lib/constants";
+
+type Point = {
+  x: number;
+  y: number;
+};
+
+interface WaveConfig {
+  offset: number;
+  amplitude: number;
+  frequency: number;
+  color: string;
+  opacity: number;
+}
+
+const highlightPills = [
+  "Full Stack",
+  "Desktop Apps",
+  "DevOps",
+] as const;
+
+const heroStats: { label: string; value: string }[] = [
+  { label: "Technologies", value: "20+" },
+  { label: "Projects Built", value: "10+" },
+  { label: "Open Source", value: "Active" },
+];
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, staggerChildren: 0.12 },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const statsVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.6, ease: "easeOut", staggerChildren: 0.08 },
+  },
+};
 
 export function HeroSection() {
-  const [roleIndex, setRoleIndex] = useState(0)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const mouseRef = useRef<Point>({ x: 0, y: 0 });
+  const targetMouseRef = useRef<Point>({ x: 0, y: 0 });
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setRoleIndex((i) => (i + 1) % ROLES.length)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [])
+    const canvas = canvasRef.current;
+    if (!canvas) return undefined;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return undefined;
+
+    let animationId: number;
+    let time = 0;
+
+    const computeThemeColors = () => {
+      const rootStyles = getComputedStyle(document.documentElement);
+
+      const resolveColor = (variables: string[], alpha = 1) => {
+        const tempEl = document.createElement("div");
+        tempEl.style.position = "absolute";
+        tempEl.style.visibility = "hidden";
+        tempEl.style.width = "1px";
+        tempEl.style.height = "1px";
+        document.body.appendChild(tempEl);
+
+        let color = `rgba(255, 255, 255, ${alpha})`;
+
+        for (const variable of variables) {
+          const value = rootStyles.getPropertyValue(variable).trim();
+          if (value) {
+            tempEl.style.backgroundColor = `var(${variable})`;
+            const computedColor = getComputedStyle(tempEl).backgroundColor;
+
+            if (computedColor && computedColor !== "rgba(0, 0, 0, 0)") {
+              if (alpha < 1) {
+                const rgbMatch = computedColor.match(
+                  /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/
+                );
+                if (rgbMatch) {
+                  color = `rgba(${rgbMatch[1]}, ${rgbMatch[2]}, ${rgbMatch[3]}, ${alpha})`;
+                } else {
+                  color = computedColor;
+                }
+              } else {
+                color = computedColor;
+              }
+              break;
+            }
+          }
+        }
+
+        document.body.removeChild(tempEl);
+        return color;
+      };
+
+      return {
+        backgroundTop: resolveColor(["--background"], 1),
+        backgroundBottom: resolveColor(["--muted", "--background"], 0.95),
+        wavePalette: [
+          {
+            offset: 0,
+            amplitude: 70,
+            frequency: 0.003,
+            color: resolveColor(["--primary"], 0.8),
+            opacity: 0.45,
+          },
+          {
+            offset: Math.PI / 2,
+            amplitude: 90,
+            frequency: 0.0026,
+            color: resolveColor(["--accent", "--primary"], 0.7),
+            opacity: 0.35,
+          },
+          {
+            offset: Math.PI,
+            amplitude: 60,
+            frequency: 0.0034,
+            color: resolveColor(["--secondary", "--foreground"], 0.65),
+            opacity: 0.3,
+          },
+          {
+            offset: Math.PI * 1.5,
+            amplitude: 80,
+            frequency: 0.0022,
+            color: resolveColor(["--primary-foreground", "--foreground"], 0.25),
+            opacity: 0.25,
+          },
+          {
+            offset: Math.PI * 2,
+            amplitude: 55,
+            frequency: 0.004,
+            color: resolveColor(["--foreground"], 0.2),
+            opacity: 0.2,
+          },
+        ] satisfies WaveConfig[],
+      };
+    };
+
+    let themeColors = computeThemeColors();
+
+    const handleThemeMutation = () => {
+      themeColors = computeThemeColors();
+    };
+
+    const observer = new MutationObserver(handleThemeMutation);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-theme"],
+    });
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const mouseInfluence = prefersReducedMotion ? 10 : 70;
+    const influenceRadius = prefersReducedMotion ? 160 : 320;
+    const smoothing = prefersReducedMotion ? 0.04 : 0.1;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    const recenterMouse = () => {
+      const centerPoint = { x: canvas.width / 2, y: canvas.height / 2 };
+      mouseRef.current = centerPoint;
+      targetMouseRef.current = centerPoint;
+    };
+
+    const handleResize = () => {
+      resizeCanvas();
+      recenterMouse();
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      targetMouseRef.current = { x: event.clientX, y: event.clientY };
+    };
+
+    const handleMouseLeave = () => {
+      recenterMouse();
+    };
+
+    resizeCanvas();
+    recenterMouse();
+
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseLeave);
+
+    const drawWave = (wave: WaveConfig) => {
+      ctx.save();
+      ctx.beginPath();
+
+      for (let x = 0; x <= canvas.width; x += 4) {
+        const dx = x - mouseRef.current.x;
+        const dy = canvas.height / 2 - mouseRef.current.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const influence = Math.max(0, 1 - distance / influenceRadius);
+        const mouseEffect =
+          influence *
+          mouseInfluence *
+          Math.sin(time * 0.001 + x * 0.01 + wave.offset);
+
+        const y =
+          canvas.height / 2 +
+          Math.sin(x * wave.frequency + time * 0.002 + wave.offset) *
+            wave.amplitude +
+          Math.sin(x * wave.frequency * 0.4 + time * 0.003) *
+            (wave.amplitude * 0.45) +
+          mouseEffect;
+
+        if (x === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = wave.color;
+      ctx.globalAlpha = wave.opacity;
+      ctx.shadowBlur = 35;
+      ctx.shadowColor = wave.color;
+      ctx.stroke();
+
+      ctx.restore();
+    };
+
+    const animate = () => {
+      time += 1;
+
+      mouseRef.current.x +=
+        (targetMouseRef.current.x - mouseRef.current.x) * smoothing;
+      mouseRef.current.y +=
+        (targetMouseRef.current.y - mouseRef.current.y) * smoothing;
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, themeColors.backgroundTop);
+      gradient.addColorStop(1, themeColors.backgroundBottom);
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+
+      themeColors.wavePalette.forEach(drawWave);
+
+      animationId = window.requestAnimationFrame(animate);
+    };
+
+    animationId = window.requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseleave", handleMouseLeave);
+      cancelAnimationFrame(animationId);
+      observer.disconnect();
+    };
+  }, []);
 
   return (
-    <section className="relative flex min-h-screen items-center px-6 overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Gradient orbs */}
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/3 rounded-full blur-3xl" />
+    <section
+      className="relative isolate flex min-h-screen w-full items-center justify-center overflow-hidden bg-background"
+      role="region"
+      aria-label="Hero section"
+    >
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full"
+        aria-hidden="true"
+      />
 
-        {/* Grid pattern */}
-        <div className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: `radial-gradient(circle, oklch(0.65 0.16 260) 1px, transparent 1px)`,
-            backgroundSize: '32px 32px',
-          }}
-        />
+      <div className="absolute inset-0 -z-10 pointer-events-none">
+        <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-foreground/[0.035] blur-[140px] dark:bg-foreground/[0.06]" />
+        <div className="absolute bottom-0 right-0 h-[360px] w-[360px] rounded-full bg-foreground/[0.025] blur-[120px] dark:bg-foreground/[0.05]" />
+        <div className="absolute top-1/2 left-1/4 h-[400px] w-[400px] rounded-full bg-primary/[0.02] blur-[150px] dark:bg-primary/[0.05]" />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className="relative mx-auto max-w-3xl text-left"
-      >
-        {/* Status badge */}
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-24 text-center md:px-8 lg:px-12">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border bg-card/60 backdrop-blur-sm mb-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-full"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span className="text-xs font-medium text-muted-foreground">Available for opportunities</span>
-        </motion.div>
+          <motion.div
+            variants={itemVariants}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/40 bg-background/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-foreground/70 dark:border-border/60 dark:bg-background/70 dark:text-foreground/80"
+          >
+            <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
+            Available for opportunities
+          </motion.div>
 
-        {/* Greeting */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="font-mono text-sm text-primary mb-3 flex items-center gap-2"
-        >
-          <Sparkles className="h-3.5 w-3.5" />
-          Hi, my name is
-        </motion.p>
+          <motion.h1
+            variants={itemVariants}
+            className="mb-6 text-4xl font-semibold tracking-tight text-foreground md:text-6xl lg:text-7xl"
+          >
+            Hi, I&apos;m{" "}
+            <span className="bg-gradient-to-r from-primary via-primary/60 to-foreground/80 bg-clip-text text-transparent">
+              {SITE_CONFIG.name}
+            </span>
+          </motion.h1>
 
-        {/* Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl"
-        >
-          <span className="gradient-text">{SITE_CONFIG.name.split(' ')[0]}</span>
-          <br />
-          <span className="text-foreground">{SITE_CONFIG.name.split(' ').slice(1).join(' ')}</span>
-        </motion.h1>
+          <motion.p
+            variants={itemVariants}
+            className="mx-auto mb-10 max-w-3xl text-lg text-foreground/70 md:text-2xl"
+          >
+            {SITE_CONFIG.description}
+          </motion.p>
 
-        {/* Rotating role */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-4 h-10 sm:h-12 md:h-14 overflow-hidden"
-        >
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={roleIndex}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -20, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="text-xl sm:text-2xl md:text-3xl font-semibold text-muted-foreground"
-            >
-              I build <span className="gradient-text">{ROLES[roleIndex]}</span>
-            </motion.p>
-          </AnimatePresence>
-        </motion.div>
-
-        {/* Decorative divider */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-8 h-px w-32 origin-left"
-          style={{
-            background: 'linear-gradient(90deg, oklch(0.65 0.16 260), oklch(0.7 0.18 300), transparent)',
-          }}
-        />
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="mt-6 max-w-xl text-base text-muted-foreground leading-relaxed"
-        >
-          {SITE_CONFIG.description}
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.7 }}
-          className="mt-10 flex flex-wrap gap-3"
-        >
-          <motion.div whileTap={{ scale: 0.98 }}>
-            <Button asChild size="lg" className="glow-primary-sm hover:glow-primary transition-shadow duration-300">
+          <motion.div
+            variants={itemVariants}
+            className="mb-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+          >
+            <Button asChild size="lg" className="group gap-2 rounded-full px-8 text-base uppercase tracking-[0.15em]">
               <Link href="/projects">
                 View Projects
-                <ArrowDown className="ml-2 h-4 w-4" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             </Button>
-          </motion.div>
-          <motion.div whileTap={{ scale: 0.98 }}>
-            <Button asChild variant="outline" size="lg" className="border-primary/20 hover:border-primary/40 hover:bg-primary/5">
+            <Button asChild size="lg" variant="outline" className="rounded-full border-border/40 bg-background/60 px-8 text-base text-foreground/80 backdrop-blur transition-all hover:border-border/60 hover:bg-background/70 dark:border-border/50 dark:bg-background/40 dark:text-foreground/70 dark:hover:border-border/70 dark:hover:bg-background/50">
               <Link href="/contact">
                 <Mail className="mr-2 h-4 w-4" />
                 Contact
               </Link>
             </Button>
-          </motion.div>
-          <motion.div whileTap={{ scale: 0.98 }}>
-            <Button asChild variant="ghost" size="lg" className="hover:bg-primary/5">
+            <Button asChild size="lg" variant="ghost" className="rounded-full px-8 text-base text-foreground/70 hover:bg-background/70 dark:text-foreground/60">
               <Link href="/resume">
                 <Download className="mr-2 h-4 w-4" />
                 Resume
               </Link>
             </Button>
           </motion.div>
-        </motion.div>
-      </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex flex-col items-center gap-2"
-        >
-          <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">Scroll</span>
-          <div className="h-8 w-5 rounded-full border border-muted-foreground/30 flex items-start justify-center pt-1.5">
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="h-1 w-1 rounded-full bg-primary"
-            />
-          </div>
+          <motion.ul
+            variants={itemVariants}
+            className="mb-12 flex flex-wrap items-center justify-center gap-3 text-xs uppercase tracking-[0.2em] text-foreground/70 dark:text-foreground/80"
+          >
+            {highlightPills.map((pill) => (
+              <li
+                key={pill}
+                className="rounded-full border border-border/40 bg-background/60 px-4 py-2 backdrop-blur dark:border-border/60 dark:bg-background/70"
+              >
+                {pill}
+              </li>
+            ))}
+          </motion.ul>
+
+          <motion.div
+            variants={statsVariants}
+            className="grid gap-4 rounded-2xl border border-border/30 bg-background/60 p-6 backdrop-blur-sm dark:border-border/60 dark:bg-background/70 sm:grid-cols-3"
+          >
+            {heroStats.map((stat) => (
+              <motion.div
+                key={stat.label}
+                variants={itemVariants}
+                className="space-y-1"
+              >
+                <div className="text-xs uppercase tracking-[0.3em] text-foreground/50 dark:text-foreground/60">
+                  {stat.label}
+                </div>
+                <div className="text-3xl font-semibold text-foreground">
+                  {stat.value}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
-  )
+  );
 }

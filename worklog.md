@@ -58,3 +58,40 @@ Stage Summary:
 - All components successfully redesigned with professional UI inspired by UI TripleD library
 - Build passes with no errors
 - Key improvements: glassmorphism effects, gradient accents, glow hover states, color-coded skill categories, proper grid alignment, visual hierarchy, animated elements, shimmer hover effects
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Replace HeroSection with GlowyWavesHero template, rebrand SJT to NightDev, create professional icon
+
+Work Log:
+- Replaced HeroSection.tsx with GlowyWavesHero template from ui.tripled.work, adapted for NightDev portfolio
+  - Canvas-based animated wave system with mouse-reactive glow waves
+  - Theme-aware wave colors that respond to light/dark mode changes
+  - Staggered motion animations for badge, heading, description, buttons, pills, and stats
+  - Rounded CTA buttons (View Projects, Contact, Resume)
+  - Highlight pills: "Full Stack", "Desktop Apps", "DevOps"
+  - Stats grid: "Technologies: 20+", "Projects Built: 10+", "Open Source: Active"
+  - Background gradient orbs for depth
+  - Respects prefers-reduced-motion
+- Changed all SJT branding to NightDev:
+  - constants.ts: name changed from 'Sherwin Jefferson Tajan' to 'NightDev'
+  - Navbar.tsx: Logo text changed from SJT to NightDev, icon updated to use /icon.svg
+  - Footer.tsx: Same branding updates
+  - layout.tsx: Metadata title, OG tags, Twitter tags all updated to NightDev
+  - SplashScreen (loader.tsx): Letters changed from ['S','J','T'] to ['N','i','g','h','t','D','e','v'] with primary color on "Dev"
+  - admin-sidebar.tsx: Alt text and src updated
+  - admin/login-page.tsx: Alt text and src updated
+- Created professional SVG icon for NightDev:
+  - Hexagonal shape with gradient border (indigo/purple)
+  - Code bracket symbol </> inside with glow filter
+  - Dark background (#0a0a12) with rounded corners
+  - Subtle vertex dots on hexagon corners
+  - Saved to /home/z/my-project/public/icon.svg
+
+Stage Summary:
+- Hero section now uses immersive canvas-based glowy waves animation
+- All branding updated from SJT to NightDev
+- Professional hexagonal code-bracket SVG icon created
+- Dev server serving pages successfully (200 status)
+- Lint check passes (0 errors, 2 pre-existing warnings)
