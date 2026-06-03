@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     'Software developer focused on becoming a professional full stack software engineer. Working across frontend, backend, desktop applications, databases, Docker, DevOps workflows, and technical documentation.',
   keywords: [
     'NightDev',
-    'Sherwin Jefferson Tajan',
+    'Sherwin Jefferson Tajan',  // Real name for SEO discoverability
     'Software Developer',
     'Full Stack Developer',
     'React',

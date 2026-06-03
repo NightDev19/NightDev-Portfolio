@@ -87,7 +87,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </div>
               <div className="flex items-center gap-1">
                 <User className="h-3.5 w-3.5" />
-                <span>Sherwin Jefferson Tajan</span>
+                <span>NightDev</span>
               </div>
             </div>
           </MotionWrapper>

@@ -9,7 +9,7 @@ import { getPublishedProjects } from '@/features/projects/queries'
 export const metadata: Metadata = {
   title: 'Projects',
   description:
-    'Explore projects built by Sherwin Jefferson Tajan — from desktop applications to full-stack Docker setups and OAuth implementations.',
+    'Explore projects built by NightDev — from desktop applications to full-stack Docker setups and OAuth implementations.',
 }
 
 export default async function ProjectsPage() {

@@ -9,7 +9,7 @@ import { getPublishedPosts } from '@/features/blog/queries'
 export const metadata: Metadata = {
   title: 'Blog',
   description:
-    'Technical notes, learning logs, and documentation from Sherwin Jefferson Tajan\'s engineering journey.',
+    "Technical notes, learning logs, and documentation from NightDev's engineering journey.",
 }
 
 export default async function BlogPage() {

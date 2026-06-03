@@ -10,7 +10,7 @@ import { getSkills } from '@/features/skills/queries'
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'Learn more about Sherwin Jefferson Tajan — a software developer focused on full-stack engineering, desktop development, and continuous technical growth.',
+    'Learn more about NightDev — a software developer focused on full-stack engineering, desktop development, and continuous technical growth.',
 }
 
 const highlights = [
@@ -63,7 +63,7 @@ export default async function AboutPage() {
           <MotionWrapper>
             <SectionHeader
               label="About"
-              title="Sherwin Jefferson Tajan"
+              title="NightDev"
               align="left"
             />
           </MotionWrapper>
