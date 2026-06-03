@@ -2,6 +2,7 @@ import type { Project } from '@/features/projects/types'
 import type { Skill } from '@/features/skills/types'
 import type { Experience } from '@/features/experience/types'
 import type { BlogPost } from '@/features/blog/types'
+import type { ResumeSection } from '@/features/resume/types'
 
 // Fallback data used when Supabase is not configured or unreachable.
 // This ensures the portfolio always displays content.
@@ -167,5 +168,96 @@ export const fallbackBlogPosts: BlogPost[] = [
     published: true,
     created_at: '2024-05-01T00:00:00Z',
     updated_at: '2024-05-01T00:00:00Z',
+  },
+]
+
+export const fallbackResumeSections: ResumeSection[] = [
+  {
+    id: '1',
+    section_type: 'personal_info',
+    title: 'Sherwin Jefferson Tajan',
+    subtitle: 'Software Engineer',
+    description: 'Results-driven Software Engineer with nearly 2 years of experience in full-stack development, building modern web and desktop applications using React.js, Next.js, Python, C#, PostgreSQL, and Docker. Proven ability to develop responsive user interfaces, integrate backend services, design RESTful APIs, and collaborate effectively in Agile environments.',
+    metadata: { email: 'sherwinjeffersontajan@gmail.com', phone: '09153181689', location: 'Sitio Ilog Wawa, Tanauan City, Batangas', linkedin: 'linkedin.com/in/sherwintajan', website: 'sherwintajan.dev' },
+    order_index: 0,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    id: '2',
+    section_type: 'experience',
+    title: 'Code Fusion IT Solutions',
+    subtitle: 'Mid Software Engineer',
+    description: 'Maintained and enhanced a University Library Information Management System (LIMS) using React.js, Python, and PostgreSQL. Developed cross-platform desktop applications for IoT projects using .NET MAUI and Avalonia. Designed and integrated RESTful APIs to support seamless communication between frontend applications, backend services, and connected devices. Collaborated with cross-functional teams to develop, optimize, and troubleshoot full-stack features.',
+    metadata: { start_date: '2025-07-01', end_date: '2026-05-01', location: 'Sto. Tomas, Batangas', tech_stack: ['React.js', 'Python', 'PostgreSQL', '.NET MAUI', 'Avalonia', 'RESTful APIs', 'Docker'] },
+    order_index: 1,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    id: '3',
+    section_type: 'experience',
+    title: 'Innocore Systems Solutions',
+    subtitle: 'Junior Software Engineer',
+    description: 'Maintained and enhanced a school monitoring system using Next.js, Tailwind CSS, Supabase, Framer Motion, and shadcn/ui. Developed and maintained the company website, implementing responsive and user-friendly interfaces. Collaborated with backend developers to integrate APIs and resolve technical issues across the application stack. Optimized frontend components and application workflows, improving performance and maintainability.',
+    metadata: { start_date: '2025-05-01', end_date: '2025-10-01', location: 'Remote', tech_stack: ['Next.js', 'Tailwind CSS', 'Supabase', 'Framer Motion', 'shadcn/ui', 'RESTful APIs'] },
+    order_index: 2,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    id: '4',
+    section_type: 'experience',
+    title: 'Tanauan City Academy',
+    subtitle: 'Secondary Teacher',
+    description: 'Delivered Senior High School Computer Programming I–IV courses, covering Python, web development, SQL databases, and hardware fundamentals. Developed instructional materials and practical programming exercises. Provided technical support to faculty members by troubleshooting network and technology issues. Guided students in hands-on projects involving programming, database management, and web application development.',
+    metadata: { start_date: '2025-05-01', end_date: '2025-10-01', location: 'Tanauan City, Batangas', tech_stack: ['Python', 'Web Development', 'SQL', 'Computer Hardware', 'Teaching'] },
+    order_index: 3,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    id: '5',
+    section_type: 'education',
+    title: 'Batangas State University — JPLCP Campus',
+    subtitle: 'Bachelor of Science in Information Technology',
+    description: null,
+    metadata: { start_date: '2020-08-01', end_date: '2024-08-01', location: 'Malvar, Batangas' },
+    order_index: 1,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    id: '6',
+    section_type: 'awards',
+    title: "Dean's Lister, 2nd Year College",
+    subtitle: null,
+    description: null,
+    metadata: { year: '2022' },
+    order_index: 1,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    id: '7',
+    section_type: 'awards',
+    title: "Dean's Lister, 3rd Year College",
+    subtitle: null,
+    description: null,
+    metadata: { year: '2023' },
+    order_index: 2,
+    created_at: '',
+    updated_at: '',
+  },
+  {
+    id: '8',
+    section_type: 'skills',
+    title: 'Technical Skills',
+    subtitle: null,
+    description: null,
+    metadata: { core: ['Web Development', 'Frontend Development', 'Backend Development', 'Software Engineering', 'System Design', 'UI/UX'], technical: ['React.js', 'Next.js', 'Python', 'C#', '.NET MAUI', 'Avalonia UI', 'FastAPI', 'Node.js', 'Express', 'RESTful APIs', 'PostgreSQL', 'Supabase', 'MongoDB', 'Docker', 'Git', 'CI/CD', 'RBAC'], soft: ['Agile Collaboration', 'Scrum', 'Responsive Design', 'Technical Documentation', 'Mentoring'] },
+    order_index: 0,
+    created_at: '',
+    updated_at: '',
   },
 ]

@@ -211,6 +211,41 @@ export interface Database {
           created_at?: string
         }
       }
+      resume_sections: {
+        Row: {
+          id: string
+          section_type: string
+          title: string | null
+          subtitle: string | null
+          description: string | null
+          metadata: Json
+          order_index: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          section_type: string
+          title?: string | null
+          subtitle?: string | null
+          description?: string | null
+          metadata?: Json
+          order_index?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          section_type?: string
+          title?: string | null
+          subtitle?: string | null
+          description?: string | null
+          metadata?: Json
+          order_index?: number
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>

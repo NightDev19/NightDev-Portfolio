@@ -1,26 +1,29 @@
 import Link from 'next/link'
-import { FolderKanban, FileText, Wrench, Briefcase, MessageSquare } from 'lucide-react'
+import { FolderKanban, FileText, Wrench, Briefcase, MessageSquare, FileUser } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getAllProjectsAdmin } from '@/features/projects/queries'
 import { getAllPostsAdmin } from '@/features/blog/queries'
 import { getSkills } from '@/features/skills/queries'
 import { getExperiences } from '@/features/experience/queries'
 import { getContactMessages } from '@/features/contact/actions'
+import { getResumeSections } from '@/features/resume/queries'
 
 const dashboardCards = [
   { label: 'Projects', href: '/admin/projects', icon: FolderKanban, getKey: 'projects' },
   { label: 'Blog Posts', href: '/admin/blog', icon: FileText, getKey: 'posts' },
   { label: 'Skills', href: '/admin/skills', icon: Wrench, getKey: 'skills' },
   { label: 'Experience', href: '/admin/experience', icon: Briefcase, getKey: 'experiences' },
+  { label: 'Resume', href: '/admin/resume', icon: FileUser, getKey: 'resume' },
   { label: 'Messages', href: '/admin/messages', icon: MessageSquare, getKey: 'messages' },
 ]
 
 export async function AdminDashboard() {
-  const [projects, posts, skills, experiences, messages] = await Promise.all([
+  const [projects, posts, skills, experiences, resumeSections, messages] = await Promise.all([
     getAllProjectsAdmin(),
     getAllPostsAdmin(),
     getSkills(),
     getExperiences(),
+    getResumeSections(),
     getContactMessages(),
   ])
 
@@ -29,6 +32,7 @@ export async function AdminDashboard() {
     posts: posts.length,
     skills: skills.length,
     experiences: experiences.length,
+    resume: resumeSections.length,
     messages: messages.length,
   }
 

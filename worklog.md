@@ -95,3 +95,41 @@ Stage Summary:
 - Professional hexagonal code-bracket SVG icon created
 - Dev server serving pages successfully (200 status)
 - Lint check passes (0 errors, 2 pre-existing warnings)
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Make resume editable from admin panel
+
+Work Log:
+- Explored existing feature architecture: projects, blog, skills, experience all follow 4-file convention (types.ts, schemas.ts, queries.ts, actions.ts)
+- Analyzed admin UI pattern: inline-table with add-form, edit-dialog, and delete-button client components
+- Designed resume_sections table with flexible JSONB metadata field to handle different section types (personal_info, experience, education, awards, skills)
+- Created Supabase migration: supabase/migration-add-resume.sql with table, RLS policies, triggers, and seed data
+- Created resume feature module:
+  - src/features/resume/types.ts — ResumeSection interface + convenience types (PersonalInfo, ResumeExperience, etc.)
+  - src/features/resume/schemas.ts — Zod validation with section_type enum
+  - src/features/resume/queries.ts — getResumeSections(), getResumeSectionById(), getAllResumeSectionsAdmin() with fallback
+  - src/features/resume/actions.ts — createResumeSection(), updateResumeSection(), deleteResumeSection() with revalidatePath
+- Added fallbackResumeSections to src/lib/fallback-data.ts matching the hardcoded resume data
+- Added resume_sections to Database types in src/types/database.ts
+- Created admin resume page:
+  - src/app/(admin)/admin/resume/page.tsx — Groups sections by type with tables, add/edit/delete actions
+  - src/app/(admin)/admin/resume/add-section-form.tsx — Card form with section type selector, title, subtitle, description, JSON metadata editor
+  - src/app/(admin)/admin/resume/edit-section-dialog.tsx — Dialog with same fields pre-populated
+  - src/app/(admin)/admin/resume/delete-button.tsx — Confirmation dialog + delete action
+- Rewrote public resume page (src/app/(public)/resume/page.tsx):
+  - Converted from hardcoded 'use client' to server-rendered async component
+  - Fetches data from Supabase via getResumeSections()
+  - Parses ResumeSection[] into structured ResumeData (personalInfo, experience, education, awards, skills)
+  - Formats date ranges, renders all sections conditionally
+- Updated admin dashboard (dashboard-content.tsx) with Resume card + FileUser icon
+- Updated ADMIN_NAV_LINKS in constants.ts to include Resume link
+- Build compiles successfully
+
+Stage Summary:
+- Resume data is now fully editable from the admin panel at /admin/resume
+- Uses flexible resume_sections table with JSONB metadata for different section types
+- Admin can add/edit/delete personal info, experience entries, education, awards, and skills sections
+- Public resume page now fetches dynamically from Supabase with fallback data
+- Admin dashboard and sidebar updated with Resume navigation

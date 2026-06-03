@@ -35,5 +35,6 @@ export const ADMIN_NAV_LINKS = [
   { label: 'Blog', href: '/admin/blog' },
   { label: 'Skills', href: '/admin/skills' },
   { label: 'Experience', href: '/admin/experience' },
+  { label: 'Resume', href: '/admin/resume' },
   { label: 'Messages', href: '/admin/messages' },
 ] as const
