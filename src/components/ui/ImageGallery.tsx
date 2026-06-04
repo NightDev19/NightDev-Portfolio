@@ -21,7 +21,6 @@ import {
   ExternalLink,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import Image from 'next/image'
 
 interface StorageImage {
   name: string
@@ -173,12 +172,11 @@ export function ImageGallery({ onInsertToContent, onSelectCover }: ImageGalleryP
                 >
                   {/* Image */}
                   <div className="relative aspect-square bg-muted">
-                    <Image
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={image.url}
                       alt={image.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                      className="object-cover w-full h-full"
                     />
 
                     {/* Hover overlay with actions */}

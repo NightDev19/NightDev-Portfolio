@@ -2,25 +2,20 @@
 
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { deleteResumeSection } from '@/features/resume/actions'
+import { deleteTestimonial } from '@/features/testimonials/actions'
 import { toast } from 'sonner'
 
-interface DeleteResumeSectionButtonProps {
-  sectionId: string
-  sectionTitle: string
-}
-
-export function DeleteResumeSectionButton({ sectionId, sectionTitle }: DeleteResumeSectionButtonProps) {
+export function DeleteTestimonialButton({ testimonialId }: { testimonialId: string }) {
   const router = useRouter()
 
   async function handleDelete() {
-    if (!confirm(`Are you sure you want to delete "${sectionTitle}"?`)) return
+    if (!confirm('Are you sure you want to delete this testimonial?')) return
 
-    const result = await deleteResumeSection(sectionId)
+    const result = await deleteTestimonial(testimonialId)
     if (result.error) {
       toast.error(result.error)
     } else {
-      toast.success('Resume section deleted')
+      toast.success('Testimonial deleted')
       router.refresh()
     }
   }

@@ -7,9 +7,17 @@ import { BlogCard } from '@/components/ui/BlogCard'
 import { getPublishedPosts } from '@/features/blog/queries'
 
 export const metadata: Metadata = {
-  title: 'Blog',
+  title: 'Blog — Developer Journal & Technical Notes',
   description:
-    "Technical notes, learning logs, and documentation from NightDev's engineering journey.",
+    'Technical notes, learning logs, and in-depth documentation from Sherwin Jefferson Tajan (NightDev). Covering React, Next.js, TypeScript, Python, .NET, Docker, databases, DevOps workflows, and software engineering best practices.',
+  alternates: {
+    canonical: '/blog',
+  },
+  openGraph: {
+    title: 'Blog — NightDev Developer Journal',
+    description:
+      'Technical notes, learning logs, and documentation from NightDev\'s engineering journey across web, desktop, and DevOps.',
+  },
 }
 
 export default async function BlogPage() {

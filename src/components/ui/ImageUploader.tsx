@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { Upload, X, Loader2, ImagePlus, CheckCircle } from 'lucide-react'
 import { toast } from 'sonner'
-import Image from 'next/image'
 
 interface UploadedImage {
   path: string
@@ -227,12 +226,11 @@ export function ImageUploader({
               >
                 {/* Thumbnail */}
                 <div className="relative h-14 w-14 shrink-0 rounded-md overflow-hidden bg-muted">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={image.url}
                     alt={image.name}
-                    fill
-                    className="object-cover"
-                    sizes="56px"
+                    className="object-cover w-full h-full"
                   />
                 </div>
 

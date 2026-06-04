@@ -20,6 +20,10 @@ export async function loginWithEmail(email: string, password: string) {
 }
 
 export async function logout() {
+  const supabase = createAdminClient()
+  await supabase.auth.signOut()
+
   revalidatePath('/admin')
+  revalidatePath('/')
   return { success: true }
 }

@@ -4,16 +4,19 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Sun, Moon } from 'lucide-react'
+import { Menu, X, Sun, Moon, Shield } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
 import { NAV_LINKS, SITE_CONFIG } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
+import { createClient } from '@/lib/supabase/client'
+import type { User } from '@supabase/supabase-js'
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
   const prevPathname = useRef(pathname)
@@ -28,6 +31,23 @@ export function Navbar() {
 
   useEffect(() => {
     queueMicrotask(() => setMounted(true))
+  }, [])
+
+  // Check auth state
+  useEffect(() => {
+    const supabase = createClient()
+
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null)
+      }
+    )
+
+    return () => subscription.unsubscribe()
   }, [])
 
   useEffect(() => {
@@ -53,7 +73,6 @@ export function Navbar() {
     >
       <nav className="mx-auto max-w-5xl px-6">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
           <Link href="/" className="group flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden bg-primary/10 border border-primary/20 group-hover:bg-primary/15 group-hover:border-primary/30 transition-all duration-200">
               <img
@@ -68,7 +87,6 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map((link) => (
               <Link
@@ -92,10 +110,23 @@ export function Navbar() {
               </Link>
             ))}
 
-            {/* Divider */}
-            <div className="w-px h-5 bg-border/50 mx-1.5" />
+            {/* Admin link — only visible when logged in */}
+            {user && (
+              <Link
+                href="/admin"
+                className={cn(
+                  'relative px-3.5 py-2 rounded-lg text-sm transition-all duration-200 flex items-center gap-1.5',
+                  pathname.startsWith('/admin')
+                    ? 'text-foreground font-medium bg-secondary/60'
+                    : 'text-primary hover:text-primary/80 hover:bg-primary/5'
+                )}
+              >
+                <Shield className="h-3.5 w-3.5" />
+                Admin
+              </Link>
+            )}
 
-            {/* Theme toggle */}
+            <div className="w-px h-5 bg-border/50 mx-1.5" />
             {mounted && (
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -104,23 +135,11 @@ export function Navbar() {
               >
                 <AnimatePresence mode="wait" initial={false}>
                   {theme === 'dark' ? (
-                    <motion.div
-                      key="sun"
-                      initial={{ y: -8, opacity: 0, rotate: -90 }}
-                      animate={{ y: 0, opacity: 1, rotate: 0 }}
-                      exit={{ y: 8, opacity: 0, rotate: 90 }}
-                      transition={{ duration: 0.2 }}
-                    >
+                    <motion.div key="sun" initial={{ y: -8, opacity: 0, rotate: -90 }} animate={{ y: 0, opacity: 1, rotate: 0 }} exit={{ y: 8, opacity: 0, rotate: 90 }} transition={{ duration: 0.2 }}>
                       <Sun className="h-4 w-4" />
                     </motion.div>
                   ) : (
-                    <motion.div
-                      key="moon"
-                      initial={{ y: -8, opacity: 0, rotate: -90 }}
-                      animate={{ y: 0, opacity: 1, rotate: 0 }}
-                      exit={{ y: 8, opacity: 0, rotate: 90 }}
-                      transition={{ duration: 0.2 }}
-                    >
+                    <motion.div key="moon" initial={{ y: -8, opacity: 0, rotate: -90 }} animate={{ y: 0, opacity: 1, rotate: 0 }} exit={{ y: 8, opacity: 0, rotate: 90 }} transition={{ duration: 0.2 }}>
                       <Moon className="h-4 w-4" />
                     </motion.div>
                   )}
@@ -129,7 +148,6 @@ export function Navbar() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 md:hidden">
             {mounted && (
               <button
@@ -140,19 +158,12 @@ export function Navbar() {
                 {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </button>
             )}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle navigation menu"
-              className="hover:bg-secondary/40"
-            >
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle navigation menu" className="hover:bg-secondary/40">
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
 
-        {/* Mobile Nav */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -178,6 +189,23 @@ export function Navbar() {
                     {link.label}
                   </Link>
                 ))}
+
+                {/* Admin link in mobile menu — only visible when logged in */}
+                {user && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      'flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm transition-all duration-200',
+                      pathname.startsWith('/admin')
+                        ? 'text-foreground font-medium bg-secondary/60'
+                        : 'text-primary hover:text-primary/80 hover:bg-primary/5'
+                    )}
+                  >
+                    <Shield className="h-3.5 w-3.5" />
+                    Admin
+                  </Link>
+                )}
               </div>
             </motion.div>
           )}

@@ -12,7 +12,6 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, ImageIcon, X } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { blogPostSchema, type BlogPostFormData } from '@/features/blog/schemas'
 import { createBlogPost } from '@/features/blog/actions'
 import { ImageUploader } from '@/components/ui/ImageUploader'
@@ -132,12 +131,11 @@ export default function NewBlogPostPage() {
                 {coverImage ? (
                   <div className="relative rounded-lg overflow-hidden border bg-muted">
                     <div className="relative w-full h-48">
-                      <Image
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
                         src={coverImage}
                         alt="Cover"
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 640px"
+                        className="object-cover w-full h-full"
                       />
                     </div>
                     <Button

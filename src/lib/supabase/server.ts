@@ -2,6 +2,12 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import type { Database } from '@/types/database'
 
+function isSupabaseConfigured(): boolean {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  return !!url && !!key && !url.includes('your-project')
+}
+
 export async function createServerSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -33,4 +39,24 @@ export async function createServerSupabaseClient() {
       },
     }
   )
+}
+
+/**
+ * Safely get the current user without throwing when Supabase is not configured.
+ * Returns null if credentials are missing or user is not authenticated.
+ */
+export async function getCurrentUserSafe() {
+  if (!isSupabaseConfigured()) {
+    return null
+  }
+
+  try {
+    const supabase = await createServerSupabaseClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    return user
+  } catch {
+    return null
+  }
 }

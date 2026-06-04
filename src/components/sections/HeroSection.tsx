@@ -318,7 +318,7 @@ export function HeroSection() {
 
           <motion.h1
             variants={itemVariants}
-            className="mb-6 text-4xl font-semibold tracking-tight text-foreground md:text-6xl lg:text-7xl"
+            className="mb-6 text-3xl font-semibold tracking-tight text-foreground md:text-5xl lg:text-6xl"
           >
             Hi, I&apos;m{" "}
             <span className="bg-gradient-to-r from-primary via-primary/60 to-foreground/80 bg-clip-text text-transparent">

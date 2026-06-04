@@ -7,9 +7,17 @@ import { ProjectCard } from '@/components/ui/ProjectCard'
 import { getPublishedProjects } from '@/features/projects/queries'
 
 export const metadata: Metadata = {
-  title: 'Projects',
+  title: 'Projects — Web Apps, Desktop Applications & DevOps',
   description:
-    'Explore projects built by NightDev — from desktop applications to full-stack Docker setups and OAuth implementations.',
+    'Explore projects built by Sherwin Jefferson Tajan (NightDev) — full-stack web applications with React and Next.js, desktop applications with .NET and Avalonia UI, Docker Compose setups, OAuth implementations, and more.',
+  alternates: {
+    canonical: '/projects',
+  },
+  openGraph: {
+    title: 'Projects by NightDev',
+    description:
+      'Full-stack web apps, desktop applications, Docker setups, and authentication systems built by NightDev.',
+  },
 }
 
 export default async function ProjectsPage() {

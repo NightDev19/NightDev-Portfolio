@@ -3,6 +3,7 @@ import type { Skill } from '@/features/skills/types'
 import type { Experience } from '@/features/experience/types'
 import type { BlogPost } from '@/features/blog/types'
 import type { ResumeSection } from '@/features/resume/types'
+import type { Testimonial } from '@/features/testimonials/types'
 
 // Fallback data used when Supabase is not configured or unreachable.
 // This ensures the portfolio always displays content.
@@ -259,5 +260,78 @@ export const fallbackResumeSections: ResumeSection[] = [
     order_index: 0,
     created_at: '',
     updated_at: '',
+  },
+]
+
+export const fallbackTestimonials: Testimonial[] = [
+  {
+    id: '1',
+    name: 'Maria Santos',
+    role: 'Project Manager',
+    company: 'Code Fusion IT Solutions',
+    avatar_url: null,
+    content: 'Sherwin consistently delivered high-quality code on our LIMS project. His ability to pick up new technologies quickly and apply them effectively made him a valuable team member. He communicates clearly and always meets deadlines.',
+    rating: 5,
+    featured: true,
+    published: true,
+    order_index: 1,
+    created_at: '2024-06-15T00:00:00Z',
+    updated_at: '2024-06-15T00:00:00Z',
+  },
+  {
+    id: '2',
+    name: 'David Chen',
+    role: 'Senior Backend Developer',
+    company: 'Innocore Systems Solutions',
+    avatar_url: null,
+    content: 'Working with Sherwin on the school monitoring system was a great experience. He has a strong eye for UI/UX detail and consistently built responsive, accessible interfaces. His understanding of full-stack workflows made collaboration seamless.',
+    rating: 5,
+    featured: true,
+    published: true,
+    order_index: 2,
+    created_at: '2024-05-10T00:00:00Z',
+    updated_at: '2024-05-10T00:00:00Z',
+  },
+  {
+    id: '3',
+    name: 'Rebecca Torres',
+    role: 'IT Department Head',
+    company: 'Tanauan City Academy',
+    avatar_url: null,
+    content: 'Sherwin was an outstanding teacher who brought real-world programming experience into the classroom. His students consistently praised his practical approach to teaching Python and web development. He also provided invaluable technical support to our faculty.',
+    rating: 5,
+    featured: true,
+    published: true,
+    order_index: 3,
+    created_at: '2024-04-20T00:00:00Z',
+    updated_at: '2024-04-20T00:00:00Z',
+  },
+  {
+    id: '4',
+    name: 'James Villanueva',
+    role: 'Full Stack Developer',
+    company: 'Freelance Collaboration',
+    avatar_url: null,
+    content: 'I collaborated with Sherwin on a freelance project and was impressed by his professionalism and technical skills. He built a clean, well-structured Next.js frontend with Supabase integration in record time. Highly recommended for any full-stack role.',
+    rating: 4,
+    featured: false,
+    published: true,
+    order_index: 4,
+    created_at: '2024-03-15T00:00:00Z',
+    updated_at: '2024-03-15T00:00:00Z',
+  },
+  {
+    id: '5',
+    name: 'Angela Reyes',
+    role: 'QA Engineer',
+    company: 'Code Fusion IT Solutions',
+    avatar_url: null,
+    content: "Sherwin's code is well-organized and easy to test. He writes clean, maintainable code and always considers edge cases. His desktop applications with .NET were particularly impressive — stable, performant, and well-documented.",
+    rating: 5,
+    featured: false,
+    published: true,
+    order_index: 5,
+    created_at: '2024-02-28T00:00:00Z',
+    updated_at: '2024-02-28T00:00:00Z',
   },
 ]

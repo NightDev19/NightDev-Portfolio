@@ -1,7 +1,17 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextRequest, NextResponse } from 'next/server'
+import { requireAuth } from '@/lib/auth'
 
+/**
+ * List files in blog-images storage.
+ * Protected: Requires authentication.
+ */
 export async function GET(request: NextRequest) {
+  const user = await requireAuth()
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const searchParams = request.nextUrl.searchParams
     const folder = searchParams.get('folder') || 'blog'

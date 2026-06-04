@@ -1,12 +1,18 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
+import { requireAuth } from '@/lib/auth'
 
 /**
  * One-time migration endpoint.
  * Run: curl http://localhost:3000/api/migrate
- * Then DELETE this file after running.
+ * Protected: Requires authentication.
  */
 export async function GET() {
+  const user = await requireAuth()
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const results: { step: string; status: string; message?: string }[] = []
 
   try {

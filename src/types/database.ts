@@ -87,6 +87,7 @@ export interface Database {
           slug: string
           excerpt: string | null
           content: string
+          cover_image: string | null
           tags: string[] | null
           published: boolean
           created_at: string
@@ -98,6 +99,7 @@ export interface Database {
           slug: string
           excerpt?: string | null
           content: string
+          cover_image?: string | null
           tags?: string[] | null
           published?: boolean
           created_at?: string
@@ -109,6 +111,7 @@ export interface Database {
           slug?: string
           excerpt?: string | null
           content?: string
+          cover_image?: string | null
           tags?: string[] | null
           published?: boolean
           created_at?: string
@@ -209,6 +212,50 @@ export interface Database {
           message?: string
           read?: boolean
           created_at?: string
+        }
+      }
+      testimonials: {
+        Row: {
+          id: string
+          name: string
+          role: string | null
+          company: string | null
+          avatar_url: string | null
+          content: string
+          rating: number | null
+          featured: boolean
+          published: boolean
+          order_index: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          role?: string | null
+          company?: string | null
+          avatar_url?: string | null
+          content: string
+          rating?: number | null
+          featured?: boolean
+          published?: boolean
+          order_index?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          role?: string | null
+          company?: string | null
+          avatar_url?: string | null
+          content?: string
+          rating?: number | null
+          featured?: boolean
+          published?: boolean
+          order_index?: number
+          created_at?: string
+          updated_at?: string
         }
       }
       resume_sections: {

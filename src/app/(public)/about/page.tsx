@@ -8,9 +8,17 @@ import { SkillsSection } from '@/components/sections/SkillsSection'
 import { getSkills } from '@/features/skills/queries'
 
 export const metadata: Metadata = {
-  title: 'About',
+  title: 'About — Full Stack Developer & Continuous Learner',
   description:
-    'Learn more about NightDev — a software developer focused on full-stack engineering, desktop development, and continuous technical growth.',
+    'Learn about Sherwin Jefferson Tajan (NightDev) — a software developer specializing in full-stack web development with React, Next.js, and Python, desktop applications with .NET and Avalonia UI, and DevOps workflows with Docker. Driven by clean architecture, maintainable code, and continuous technical growth.',
+  alternates: {
+    canonical: '/about',
+  },
+  openGraph: {
+    title: 'About NightDev — Full Stack Developer',
+    description:
+      'Software developer specializing in full-stack web development, desktop applications with .NET and Avalonia UI, and DevOps with Docker.',
+  },
 }
 
 const highlights = [

@@ -1,7 +1,17 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
+import { requireAuth } from '@/lib/auth'
 
+/**
+ * Debug endpoint to check schema status.
+ * Protected: Requires authentication.
+ */
 export async function GET() {
+  const user = await requireAuth()
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const supabase = createAdminClient()
 

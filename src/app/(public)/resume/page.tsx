@@ -3,8 +3,23 @@ import { Button } from '@/components/ui/button'
 import { Download, Globe, Linkedin, Mail, MapPin, Phone } from 'lucide-react'
 import { getResumeSections } from '@/features/resume/queries'
 import type { ResumeData, ResumeSection } from '@/features/resume/types'
+import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Resume — Experience, Skills & Education',
+  description:
+    'Professional resume of Sherwin Jefferson Tajan (NightDev) — Full Stack Software Developer with experience in React, Next.js, TypeScript, Python, FastAPI, .NET, Avalonia UI, Docker, PostgreSQL, and DevOps workflows.',
+  alternates: {
+    canonical: '/resume',
+  },
+  openGraph: {
+    title: 'Resume — NightDev',
+    description:
+      'Professional resume of Sherwin Jefferson Tajan — Full Stack Software Developer experienced in web, desktop, and DevOps.',
+  },
+}
 
 function formatDateRange(start?: string, end?: string): string {
   if (!start) return ''

@@ -2,17 +2,27 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
-  // Gracefully handle missing Supabase credentials
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
+  // If Supabase is not configured, block admin sub-routes and API routes
+  // Allow /admin through so the login page can render
   if (!supabaseUrl || !supabaseAnonKey) {
+    if (request.nextUrl.pathname.startsWith('/admin/') && request.nextUrl.pathname !== '/admin/') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/admin'
+      return NextResponse.redirect(url)
+    }
+    if (
+      request.nextUrl.pathname.startsWith('/api/storage') ||
+      request.nextUrl.pathname.startsWith('/api/migrate') ||
+      request.nextUrl.pathname.startsWith('/api/debug')
+    ) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
     return NextResponse.next({ request })
   }
 
-  // For Server Action requests, we need to be careful about modifying the response.
-  // Server Actions send POST requests with the Next-Action header.
-  // We still process auth (for session refresh) but handle the response carefully.
   const isServerAction = request.headers.get('Next-Action') !== null
 
   let supabaseResponse = NextResponse.next({
@@ -31,9 +41,6 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           )
-          // For Server Action requests, avoid creating a new response object
-          // as it can interfere with the action resolution.
-          // Just set cookies on the existing response instead.
           if (!isServerAction) {
             supabaseResponse = NextResponse.next({
               request,
@@ -47,24 +54,34 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // Refresh the session
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Protect admin sub-routes only (not /admin itself, which shows the login page)
-  // /admin/projects, /admin/blog, etc. require authentication
-  // /admin alone serves the login page when unauthenticated
+  // Protect admin sub-routes (not /admin itself — the layout handles the login page)
   if (request.nextUrl.pathname.startsWith('/admin/') && request.nextUrl.pathname !== '/admin/') {
     if (!user) {
+      // For server actions, return a JSON error instead of redirecting
+      // (redirects on server actions cause "Failed to find Server Action" errors)
+      if (isServerAction) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
       const url = request.nextUrl.clone()
       url.pathname = '/admin'
       return NextResponse.redirect(url)
     }
   }
 
-  // If user is authenticated and visits /admin, let them through to dashboard
-  // If user is not authenticated and visits /admin, let them through to login page
+  // Protect admin API routes
+  if (
+    request.nextUrl.pathname.startsWith('/api/storage') ||
+    request.nextUrl.pathname.startsWith('/api/migrate') ||
+    request.nextUrl.pathname.startsWith('/api/debug')
+  ) {
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+  }
 
   return supabaseResponse
 }

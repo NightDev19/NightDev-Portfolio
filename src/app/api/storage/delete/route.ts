@@ -1,7 +1,17 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextRequest, NextResponse } from 'next/server'
+import { requireAuth } from '@/lib/auth'
 
+/**
+ * Delete a file from blog-images storage.
+ * Protected: Requires authentication.
+ */
 export async function POST(request: NextRequest) {
+  const user = await requireAuth()
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const { path } = await request.json()
 
