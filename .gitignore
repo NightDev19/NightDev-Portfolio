@@ -59,8 +59,6 @@ prompt
 
 # Upload files
 /upload/
-uploads/
-upload/
 
 # Local scripts
 .zscripts/
