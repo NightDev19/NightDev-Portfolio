@@ -51,14 +51,36 @@ export function EditBlogPostForm({ post }: EditBlogPostFormProps) {
     const newTags = tagInput
       .split(",")
       .map((tag) => tag.trim())
-      .filter((tag) => tag.length > 0);
+      .filter(Boolean);
 
     if (newTags.length === 0) return;
 
-    const updated = Array.from(new Set([...tags, ...newTags]));
+    const existingTags = new Set(tags.map((tag) => tag.toLowerCase()));
 
-    setTags(updated);
-    setValue("tags", updated, { shouldValidate: true });
+    const uniqueNewTags = newTags.filter((tag) => {
+      const normalizedTag = tag.toLowerCase();
+
+      if (existingTags.has(normalizedTag)) {
+        return false;
+      }
+
+      existingTags.add(normalizedTag);
+      return true;
+    });
+
+    if (uniqueNewTags.length === 0) {
+      setTagInput("");
+      return;
+    }
+
+    const updatedTags = [...tags, ...uniqueNewTags];
+
+    setTags(updatedTags);
+    setValue("tags", updatedTags, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
     setTagInput("");
   }
 

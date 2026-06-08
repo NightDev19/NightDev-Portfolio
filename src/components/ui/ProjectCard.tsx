@@ -26,13 +26,39 @@ export function ProjectCard({ project }: ProjectCardProps) {
         {/* Shimmer overlay */}
         <div className="absolute inset-0 shimmer-hover rounded-xl overflow-hidden" />
 
+        {/* Project Image */}
+        {project.image_url ? (
+          <div className="relative w-full h-44 overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={project.image_url}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            {/* Gradient overlay at bottom for smooth text transition */}
+            <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-transparent" />
+            {project.featured && (
+              <Badge className="absolute top-3 right-3 text-[10px] px-2 py-0.5 bg-primary/90 text-primary-foreground border-none shadow-sm">
+                Featured
+              </Badge>
+            )}
+          </div>
+        ) : null}
+
         <div className="relative flex flex-1 flex-col p-6">
           {/* Header */}
           <div className="flex items-start justify-between gap-3 mb-3">
-            <h3 className="font-semibold text-base group-hover:text-primary transition-colors duration-200">
-              {project.title}
-            </h3>
-            {project.featured && (
+            {!project.image_url && (
+              <h3 className="font-semibold text-base group-hover:text-primary transition-colors duration-200">
+                {project.title}
+              </h3>
+            )}
+            {project.image_url && (
+              <h3 className="font-semibold text-base group-hover:text-primary transition-colors duration-200">
+                {project.title}
+              </h3>
+            )}
+            {!project.image_url && project.featured && (
               <Badge className="shrink-0 text-[10px] px-2 py-0.5 bg-primary/10 text-primary border-primary/20 hover:bg-primary/15">
                 Featured
               </Badge>

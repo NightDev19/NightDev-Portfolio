@@ -227,9 +227,9 @@ export function HeroSection() {
         const y =
           canvas.height / 2 +
           Math.sin(x * wave.frequency + time * 0.002 + wave.offset) *
-            wave.amplitude +
+          wave.amplitude +
           Math.sin(x * wave.frequency * 0.4 + time * 0.003) *
-            (wave.amplitude * 0.45) +
+          (wave.amplitude * 0.45) +
           mouseEffect;
 
         if (x === 0) {
@@ -322,7 +322,7 @@ export function HeroSection() {
           >
             Hi, I&apos;m{" "}
             <span className="bg-gradient-to-r from-primary via-primary/60 to-foreground/80 bg-clip-text text-transparent">
-              {SITE_CONFIG.name}
+              {SITE_CONFIG.hero_name}
             </span>
           </motion.h1>
 

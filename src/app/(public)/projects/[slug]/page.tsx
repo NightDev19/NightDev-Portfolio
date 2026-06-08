@@ -48,6 +48,22 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </Button>
           </MotionWrapper>
 
+          {/* Project Image */}
+          {project.image_url && (
+            <MotionWrapper delay={0.05}>
+              <div className="relative w-full rounded-xl overflow-hidden border bg-muted mb-8">
+                <div className="relative w-full aspect-video">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={project.image_url}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </MotionWrapper>
+          )}
+
           <MotionWrapper delay={0.1}>
             <p className="font-mono text-sm text-primary mb-2">Project</p>
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">

@@ -35,13 +35,40 @@ export default function NewBlogPostPage() {
   })
 
   function addTag() {
-    const trimmed = tagInput.trim()
-    if (trimmed && !tags.includes(trimmed)) {
-      const updated = [...tags, trimmed]
-      setTags(updated)
-      setValue('tags', updated)
-      setTagInput('')
+    const newTags = tagInput
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+
+    if (newTags.length === 0) return;
+
+    const existingTags = new Set(tags.map((tag) => tag.toLowerCase()));
+
+    const uniqueNewTags = newTags.filter((tag) => {
+      const normalizedTag = tag.toLowerCase();
+
+      if (existingTags.has(normalizedTag)) {
+        return false;
+      }
+
+      existingTags.add(normalizedTag);
+      return true;
+    });
+
+    if (uniqueNewTags.length === 0) {
+      setTagInput("");
+      return;
     }
+
+    const updatedTags = [...tags, ...uniqueNewTags];
+
+    setTags(updatedTags);
+    setValue("tags", updatedTags, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+    setTagInput("");
   }
 
   function removeTag(tag: string) {

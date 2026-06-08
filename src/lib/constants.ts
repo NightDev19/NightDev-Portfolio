@@ -1,9 +1,10 @@
 export const SITE_CONFIG = {
-  name: "Sherwin Jefferson Tajan",
+  name: "NightDev",
+  hero_name: "Sherwin Jefferson Tajan",
   role: "Software Developer / Full Stack Developer",
   description:
     "Software developer focused on becoming a professional full stack software engineer. Working across frontend, backend, desktop applications, databases, Docker, DevOps workflows, and technical documentation.",
-  url: "https://sherwintajan.dev",
+  url: "https://night-dev-portfolio.vercel.app/",
   ogImage: "/og-image.png",
   links: {
     github: "https://github.com/sherwintajan",

@@ -10,10 +10,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ImageIcon, X } from 'lucide-react'
 import Link from 'next/link'
 import { projectSchema, type ProjectFormData } from '@/features/projects/schemas'
 import { updateProject } from '@/features/projects/actions'
+import { ImageUploader } from '@/components/ui/ImageUploader'
+import { ImageGallery } from '@/components/ui/ImageGallery'
 import { toast } from 'sonner'
 import type { Project } from '@/features/projects/types'
 
@@ -25,6 +27,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
   const router = useRouter()
   const [techInput, setTechInput] = useState('')
   const [techStack, setTechStack] = useState<string[]>(project.tech_stack)
+  const [imageUrl, setImageUrl] = useState(project.image_url || '')
 
   const {
     register,
@@ -47,19 +50,63 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
   })
 
   function addTech() {
-    const trimmed = techInput.trim()
-    if (trimmed && !techStack.includes(trimmed)) {
-      const updated = [...techStack, trimmed]
-      setTechStack(updated)
-      setValue('tech_stack', updated)
+    const newTechs = techInput
+      .split(',')
+      .map((tech) => tech.trim())
+      .filter(Boolean)
+  
+    if (newTechs.length === 0) return
+  
+    const existingTechs = new Set(
+      techStack.map((tech) => tech.toLowerCase())
+    )
+  
+    const uniqueNewTechs = newTechs.filter((tech) => {
+      const normalizedTech = tech.toLowerCase()
+  
+      if (existingTechs.has(normalizedTech)) {
+        return false
+      }
+  
+      existingTechs.add(normalizedTech)
+      return true
+    })
+  
+    if (uniqueNewTechs.length === 0) {
       setTechInput('')
+      return
     }
+  
+    const updated = [...techStack, ...uniqueNewTechs]
+  
+    setTechStack(updated)
+    setValue('tech_stack', updated, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    })
+    setTechInput('')
   }
 
   function removeTech(tech: string) {
     const updated = techStack.filter((t) => t !== tech)
     setTechStack(updated)
     setValue('tech_stack', updated)
+  }
+
+  function handleSelectImage(url: string) {
+    setImageUrl(url)
+    setValue('image_url', url)
+  }
+
+  function handleRemoveImage() {
+    setImageUrl('')
+    setValue('image_url', '')
+  }
+
+  function handleUploadComplete(image: { url: string }) {
+    setImageUrl(image.url)
+    setValue('image_url', image.url)
   }
 
   async function onSubmit(data: ProjectFormData) {
@@ -106,6 +153,73 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
               {errors.description && <p className="mt-1 text-sm text-destructive">{errors.description.message}</p>}
             </div>
 
+            {/* Project Image */}
+            <div>
+              <Label>Project Image</Label>
+              <div className="mt-1.5 space-y-3">
+                {imageUrl ? (
+                  <div className="relative rounded-lg overflow-hidden border bg-muted">
+                    <div className="relative w-full h-48">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={imageUrl}
+                        alt="Project"
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-2 right-2"
+                      onClick={handleRemoveImage}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                    <div className="p-3 bg-muted/50">
+                      <p className="text-xs text-muted-foreground truncate">{imageUrl}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <ImageGallery
+                      onSelectCover={handleSelectImage}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Image Upload Section */}
+            <div className="rounded-lg border p-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="h-4 w-4 text-muted-foreground" />
+                <Label className="text-sm font-medium">Upload Image</Label>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Upload an image for this project. After uploading, it will be set as the project image automatically.
+              </p>
+              <ImageUploader
+                onUploadComplete={handleUploadComplete}
+                folder="projects"
+              />
+            </div>
+
+            {/* Or paste URL manually */}
+            <div>
+              <Label htmlFor="image_url">Or paste Image URL manually</Label>
+              <Input
+                id="image_url"
+                placeholder="https://..."
+                value={imageUrl}
+                onChange={(e) => {
+                  setImageUrl(e.target.value)
+                  setValue('image_url', e.target.value)
+                }}
+                className="mt-1.5"
+              />
+            </div>
+
             <div>
               <Label>Tech Stack</Label>
               <div className="flex gap-2 mt-1.5">
@@ -133,7 +247,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
               {errors.tech_stack && <p className="mt-1 text-sm text-destructive">{errors.tech_stack.message}</p>}
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2">
               <div>
                 <Label htmlFor="github_url">GitHub URL</Label>
                 <Input id="github_url" placeholder="https://github.com/..." {...register('github_url')} className="mt-1.5" />
@@ -141,10 +255,6 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
               <div>
                 <Label htmlFor="demo_url">Demo URL</Label>
                 <Input id="demo_url" placeholder="https://..." {...register('demo_url')} className="mt-1.5" />
-              </div>
-              <div>
-                <Label htmlFor="image_url">Image URL</Label>
-                <Input id="image_url" placeholder="https://..." {...register('image_url')} className="mt-1.5" />
               </div>
             </div>
 
