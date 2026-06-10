@@ -1,6 +1,6 @@
 services:
   portfolio:
-    image: nightdev-portfolio
+    image: nightdev19/nightdev-portfolio:latest
     container_name: nightdev-portfolio
     build:
       context: .
