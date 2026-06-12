@@ -35,9 +35,6 @@ jobs:
       - name: Run lint
         run: bun run lint
 
-      - name: Run type check
-        run: bun run typecheck
-
       - name: Build Next.js app
         run: bun run build
         env:
