@@ -6,19 +6,17 @@
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
     "dev:win": "next dev -p 3000",
     "dev:win:log": "powershell -NoProfile -Command \"next dev -p 3000 2>&1 | Tee-Object -FilePath dev.log\"",
-
     "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
     "build:win": "next build && powershell -NoProfile -Command \"Copy-Item -Recurse -Force .next/static .next/standalone/.next/; Copy-Item -Recurse -Force public .next/standalone/\"",
-
     "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
     "start:win": "powershell -NoProfile -Command \"$env:NODE_ENV='production'; bun .next/standalone/server.js\"",
     "start:win:log": "powershell -NoProfile -Command \"$env:NODE_ENV='production'; bun .next/standalone/server.js 2>&1 | Tee-Object -FilePath server.log\"",
-
     "lint": "eslint .",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
