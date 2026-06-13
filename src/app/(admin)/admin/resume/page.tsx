@@ -63,10 +63,10 @@ export default async function AdminResumePage() {
                   <TableBody>
                     {group.items.map((section) => (
                       <TableRow key={section.id}>
-                        <TableCell className="font-medium max-w-[200px] truncate">
+                        <TableCell className="font-medium max-w-50 truncate">
                           {section.title || '—'}
                         </TableCell>
-                        <TableCell className="max-w-[200px] truncate text-muted-foreground">
+                        <TableCell className="max-w-50 truncate text-muted-foreground">
                           {section.subtitle || '—'}
                         </TableCell>
                         <TableCell>

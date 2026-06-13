@@ -17,11 +17,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
       className="group relative h-full"
     >
       {/* Glow effect on hover */}
-      <div className="absolute -inset-px rounded-xl bg-gradient-to-r from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/15 group-hover:via-purple-500/8 group-hover:to-primary/15 transition-all duration-500 blur-sm opacity-0 group-hover:opacity-100" />
+      <div className="absolute -inset-px rounded-xl bg-linear-to-r from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/15 group-hover:via-purple-500/8 group-hover:to-primary/15 transition-all duration-500 blur-sm opacity-0 group-hover:opacity-100" />
 
       <div className="relative h-full flex flex-col rounded-xl border bg-card/80 backdrop-blur-sm transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-lg group-hover:shadow-primary/5 overflow-hidden">
         {/* Top gradient accent */}
-        <div className="h-1 w-full bg-gradient-to-r from-primary/60 via-purple-500/60 to-primary/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="h-1 w-full bg-linear-to-r from-primary/60 via-purple-500/60 to-primary/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         {/* Shimmer overlay */}
         <div className="absolute inset-0 shimmer-hover rounded-xl overflow-hidden" />
@@ -29,14 +29,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
         {/* Project Image */}
         {project.image_url ? (
           <div className="relative w-full h-44 overflow-hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={project.image_url}
               alt={project.title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             {/* Gradient overlay at bottom for smooth text transition */}
-            <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-card/80 via-transparent to-transparent" />
             {project.featured && (
               <Badge className="absolute top-3 right-3 text-[10px] px-2 py-0.5 bg-primary/90 text-primary-foreground border-none shadow-sm">
                 Featured

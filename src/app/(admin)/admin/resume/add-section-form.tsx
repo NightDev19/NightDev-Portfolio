@@ -152,7 +152,7 @@ export function AddResumeSectionForm() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Summary, job description, etc."
-              className="mt-1.5 min-h-[80px]"
+              className="mt-1.5 min-h-20"
             />
           </div>
 
@@ -163,7 +163,7 @@ export function AddResumeSectionForm() {
               value={metadataJson}
               onChange={(e) => setMetadataJson(e.target.value)}
               placeholder='{"key": "value"}'
-              className="mt-1.5 min-h-[80px] font-mono text-xs"
+              className="mt-1.5 min-h-20 font-mono text-xs"
             />
             <p className="text-xs text-muted-foreground mt-1">
               JSON object for flexible data like dates, locations, tech stacks, etc.

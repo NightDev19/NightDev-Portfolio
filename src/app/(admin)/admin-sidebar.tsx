@@ -79,7 +79,7 @@ export function AdminSidebar() {
 
       {/* Mobile Dropdown Nav */}
       {mobileOpen && (
-        <div className="md:hidden fixed top-[53px] left-0 right-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-xl shadow-black/10">
+        <div className="md:hidden fixed top-13.25 left-0 right-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-xl shadow-black/10">
           <nav className="px-3 py-2 space-y-0.5">
             {navLinks}
           </nav>
